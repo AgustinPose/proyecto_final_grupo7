@@ -20,8 +20,7 @@ const UserSignUp = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        
-        // Aquí enviamos los datos al backend
+    
         fetch('http://localhost:3000/api/auth/register', {
             method: 'POST',
             headers: {
@@ -31,18 +30,26 @@ const UserSignUp = () => {
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                // Manejo de errores si la respuesta no es OK
+                return response.json().then(data => {
+                    console.log(data.message); // Mostrar el mensaje de error
+                });
             }
             return response.json();
         })
         .then(data => {
-            console.log('Success:', data);
-      
+            // Solo se ejecuta si la respuesta es exitosa
+            if (data) {
+                console.log('Success:', data); // Mostrar el mensaje de éxito
+            }
         })
         .catch(error => {
-            console.error('Error:', error);
+            // Este catch manejará errores de red, pero no imprimirás nada
+            // Puedes omitir este bloque si no quieres manejar errores de red
         });
     };
+    
+    
     
 
     return (
