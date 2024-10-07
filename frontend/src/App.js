@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import UserSignUp from './componentes/UserSignUp0';
+import UserSignUp from './componentes/UserSignUp';
 import LogIn from './componentes/UserLogin'; //cambiar dependiendo del nombre que le pongan
 import Feed from './views/feed'; //cambiar dependiendo del nombre que le pongan
 //import Perfil from './componentes/perfil'; //cambiar dependiendo del nombre que le pongan
