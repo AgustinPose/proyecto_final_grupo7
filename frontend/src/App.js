@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import UserSignUp from './componentes/userSignUp';
-import LogIn from './componentes/logIn'; //cambiar dependiendo del nombre que le pongan
-//import Feed from './componentes/feed'; //cambiar dependiendo del nombre que le pongan
+import LogIn from './componentes/UserLogin'; //cambiar dependiendo del nombre que le pongan
+import Feed from './views/feed'; //cambiar dependiendo del nombre que le pongan
 //import Perfil from './componentes/perfil'; //cambiar dependiendo del nombre que le pongan
 //import PerfilAmigo from './componentes/perfilAmigo'; //cambiar dependiendo del nombre que le pongan
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
@@ -25,20 +25,19 @@ function App() {
         <Routes>
           
           {/* Ruta de login */}
-        
-          <Route path="/login" element={<LogIn onLogin={handleLogin} />} />
+          <Route path="/login" element={<LogIn onLogin={handleLogin} />} /> 
           
 
           {/* Ruta de signup */}
           <Route path="/signup" element={<UserSignUp />} />
 
           {/* Ruta privada para el feed */}
-          {/*
+          
           <Route
             path="/feed"
             element={isLoggedIn ? <Feed /> : <Navigate to="/login" />}
           />
-          */}
+          
 
           {/* Ruta privada para el perfil */}
           {/*
@@ -54,3 +53,5 @@ function App() {
 }
 
 export default App;
+
+

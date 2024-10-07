@@ -28,7 +28,7 @@ const UserSignUp = () => {
             },
             body: JSON.stringify(formData),
         })
-        .then(response => {
+        .then(response => {  
             if (!response.ok) {
                 // Manejo de errores si la respuesta no es OK
                 return response.json().then(data => {
