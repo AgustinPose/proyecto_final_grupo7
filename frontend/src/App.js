@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import UserSignUp from './componentes/userSignUp';
+import UserSignUp from './componentes/UserSignUp0';
 import LogIn from './componentes/UserLogin'; //cambiar dependiendo del nombre que le pongan
 import Feed from './views/feed'; //cambiar dependiendo del nombre que le pongan
 //import Perfil from './componentes/perfil'; //cambiar dependiendo del nombre que le pongan
@@ -29,7 +29,7 @@ function App() {
           
 
           {/* Ruta de signup */}
-          <Route path="/signup" element={<UserSignUp />} />
+          <Route path="/" element={<UserSignUp />} />
 
           {/* Ruta privada para el feed */}
           
