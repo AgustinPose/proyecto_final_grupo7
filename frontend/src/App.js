@@ -9,7 +9,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import './App.css';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   const handleLogin = () => {
     setIsLoggedIn(true); 
