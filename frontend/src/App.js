@@ -7,26 +7,22 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import './App.css';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Verificamos si el usuario ya está logueado al cargar la app
-  useEffect(() => {
-    const loggedInStatus = localStorage.getItem('isLoggedIn');
-    if (loggedInStatus === 'true') {
-      setIsLoggedIn(true);
-    }
-  }, []);
+  // Inicializa el estado de login verificando el localStorage
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    return localStorage.getItem('isLoggedIn') === 'true'; // Si existe en localStorage, lo usamos
+  });
 
   // Función que se ejecuta cuando el usuario inicia sesión
   const handleLogin = () => {
-    setIsLoggedIn(true);
-    localStorage.setItem('isLoggedIn', 'true'); // Persistir el estado de logueado
+    setIsLoggedIn(true); // Actualiza el estado
+    localStorage.setItem('isLoggedIn', 'true'); // Guarda el estado en localStorage
   };
 
   // Función para manejar el logout
   const handleLogout = () => {
     setIsLoggedIn(false);
-    localStorage.removeItem('isLoggedIn'); // Remover estado de localStorage
+    localStorage.removeItem('isLoggedIn'); // Elimina el estado de localStorage
   };
 
   return (
