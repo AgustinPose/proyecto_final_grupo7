@@ -1,9 +1,10 @@
 import React from 'react';
 
-const Feed = () => {
+const Feed = ({ onLogout }) => {
     return (
-        <div className="feed-view">
-            <h1>Feed</h1>
+        <div>
+            <h1>Bienvenido al Feed</h1>
+            <button onClick={onLogout}>Cerrar sesión</button>
         </div>
     );
 };

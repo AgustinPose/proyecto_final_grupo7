@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Importa useNavigate
 
-const UserLogin = () => {
+const UserLogin = ({ onLogin }) => {
     // Estado para manejar los datos del formulario de login
     const [loginData, setLoginData] = useState({
         email: '',
@@ -10,6 +11,8 @@ const UserLogin = () => {
     // Estado para manejar mensajes de error o éxito
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
+
+    const navigate = useNavigate();
 
     // Maneja los cambios en el formulario
     const handleChange = (e) => {
@@ -45,7 +48,8 @@ const UserLogin = () => {
             if (data) {
                 setErrorMessage(''); // Limpiamos mensaje de error
                 setSuccessMessage('Inicio de sesión exitoso!');
-                console.log('Success:', data); // Replazar esto con la Redireccion que utilizaremos
+                onLogin();
+                navigate('/feed'); // Redirigimos al feed
             }
         })
         .catch(error => {
@@ -53,6 +57,10 @@ const UserLogin = () => {
             setErrorMessage('Error de red, por favor inténtalo de nuevo.');
             setSuccessMessage('');
         });
+    };
+
+    const handleSignUpRedirect = () => {
+        navigate('/signup'); // Redirige a la página de registro
     };
 
     return (
@@ -84,6 +92,8 @@ const UserLogin = () => {
                 />
             </div>
             <button type="submit">Ingresar</button>
+            <br />
+            <button type="button" onClick={handleSignUpRedirect}>Regístrate</button>
         </form>
     );
 };
