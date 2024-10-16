@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 
 const UserSignUp = () => {
 
@@ -16,6 +17,8 @@ const UserSignUp = () => {
             [e.target.name]: e.target.value
         });
     };
+
+    const navigate = useNavigate();
 
 
     const handleSubmit = (e) => {
@@ -49,7 +52,9 @@ const UserSignUp = () => {
         });
     };
     
-    
+    const userLoginRedirect = () => {
+        navigate('/login');
+    }
     
 
     return (
@@ -89,6 +94,8 @@ const UserSignUp = () => {
                 />
             </div>
             <button type="submit">Sign Up</button>
+            <br />
+            <button type="button" onClick={userLoginRedirect}>Login</button>
         </form>
     );
 };
