@@ -1,51 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import UserSignUp from './componentes/UserSignUp';
-import LogIn from './componentes/UserLogin'; //cambiar dependiendo del nombre que le pongan
-import Feed from './views/feed'; //cambiar dependiendo del nombre que le pongan
-//import Perfil from './componentes/perfil'; //cambiar dependiendo del nombre que le pongan
-//import PerfilAmigo from './componentes/perfilAmigo'; //cambiar dependiendo del nombre que le pongan
+import UserLogin from './componentes/UserLogin'; // Cambia según el nombre de tu archivo
+import Feed from './views/feed'; // Cambia según el nombre de tu archivo
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 import './App.css';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  // Inicializa el estado de login verificando el localStorage
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    return localStorage.getItem('isLoggedIn') === 'true'; // Si existe en localStorage, lo usamos
+  });
+
+  // Función que se ejecuta cuando el usuario inicia sesión
   const handleLogin = () => {
-    setIsLoggedIn(true); 
+    setIsLoggedIn(true); // Actualiza el estado
+    localStorage.setItem('isLoggedIn', 'true'); // Guarda el estado en localStorage
   };
 
+  // Función para manejar el logout
   const handleLogout = () => {
-    setIsLoggedIn(false); 
+    setIsLoggedIn(false);
+    localStorage.removeItem('isLoggedIn'); // Elimina el estado de localStorage
   };
 
   return (
     <div className="App">
       <Router>
         <Routes>
-          
-          {/* Ruta de login */}
-          <Route path="/login" element={<LogIn onLogin={handleLogin} />} /> 
-          
+          {/* Ruta para el login */}
+          <Route path="/login" element={<UserLogin onLogin={handleLogin} />} />
 
           {/* Ruta de signup */}
-          <Route path="/" element={<UserSignUp />} />
+          <Route path="/signup" element={<UserSignUp />} />
 
-          {/* Ruta privada para el feed */}
-          
+          {/* Ruta protegida para el feed */}
           <Route
             path="/feed"
-            element={isLoggedIn ? <Feed /> : <Navigate to="/login" />}
+            element={isLoggedIn ? <Feed onLogout={handleLogout} /> : <Navigate to="/login" />}
           />
-          
 
-          {/* Ruta privada para el perfil */}
-          {/*
-          <Route
-            path="/perfil"
-            element={isLoggedIn ? <Perfil onLogout={handleLogout} /> : <Navigate to="/login" />}
-          />
-          */}
+          {/* Redirigir a login si no hay ruta */}
+          <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
       </Router>
     </div>
@@ -53,5 +50,3 @@ function App() {
 }
 
 export default App;
-
-
