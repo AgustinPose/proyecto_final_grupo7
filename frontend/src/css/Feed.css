@@ -1,0 +1,138 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: whitesmoke;
+    margin: 0;
+    padding: 0;
+}
+
+.feed-layout {
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar {
+    width: 100%;
+    background-color: #f5f5f5;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.feed-content {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.sidebar ul li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+}
+
+.sidebar ul li:hover {
+    color: #007bff;
+}
+
+.sidebar ul li svg {
+    margin-right: 5px;
+}
+
+.friends-suggestions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto 20px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+.friend-card {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    width: calc(33.33% - 10px);
+    max-width: 150px;
+    box-sizing: border-box;
+}
+
+.friend-card img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-bottom: 5px;
+}
+
+.friend-card button {
+    margin-top: 5px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.main-feed {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.post-card {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.post-card img {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+@media (min-width: 768px) {
+    .feed-layout {
+        flex-direction: row;
+    }
+
+    .sidebar {
+        width: 250px;
+        height: 100vh;
+        position: fixed;
+    }
+
+    .sidebar ul {
+        flex-direction: column;
+    }
+
+    .feed-content {
+        margin-left: 250px;
+        width: calc(100% - 250px);
+    }
+}
