@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import UserSignUp from './componentes/userSignUp';
 import UserLogin from './componentes/UserLogin'; // Cambia según el nombre de tu archivo
 import Feed from './views/feed'; // Cambia según el nombre de tu archivo
+import Profile from './views/Profile'; 
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 import './App.css';
@@ -39,6 +40,11 @@ function App() {
           <Route
             path="/feed"
             element={isLoggedIn ? <Feed onLogout={handleLogout} /> : <Navigate to="/login" />}
+          />
+
+          <Route 
+            path="/user-profile"
+            element={isLoggedIn ? <Profile /> : <Navigate to="/login" />}
           />
 
           {/* Redirigir a login si no hay ruta */}

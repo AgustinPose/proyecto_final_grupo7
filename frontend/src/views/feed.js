@@ -1,10 +1,22 @@
 import React from 'react';
+import { useNavigate } from 'react-router';
 import '../Feed.css';
 import Img from "../images/playa.jpeg"
 import Matecito from "../images/playita.png"
+
 const Feed = () => {
+    const navigate = useNavigate();
+
+    const handleProfilebutton = () => {
+        navigate('/user-profile');
+    };
+
     return (
+        
         <div className="feed-view">
+            <div className='feed-button-container'>
+                <button onClick={handleProfilebutton}>Ver perfil</button>
+            </div>
             <header className="feed-header">
                 <h1>R</h1>
                 <p>Donde las conexiones florecen...</p> {/* Nuestro eslogan */}

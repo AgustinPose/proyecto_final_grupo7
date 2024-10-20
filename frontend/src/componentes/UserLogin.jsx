@@ -26,7 +26,7 @@ const UserLogin = ({ onLogin }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        fetch('http://localhost:3000/api/auth/login', {
+        fetch('http://localhost:3001/api/auth/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -41,13 +41,18 @@ const UserLogin = ({ onLogin }) => {
                     setErrorMessage(data.message || 'Credenciales incorrectas');
                 });
             }
-            return response.json();
+            return response.json();    
         })
         .then(data => {
             // Si la respuesta es exitosa
             if (data) {
+                console.log('Inicio de sesión exitoso:', data);
                 setErrorMessage(''); // Limpiamos mensaje de error
                 setSuccessMessage('Inicio de sesión exitoso!');
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('_id', data._id);
+                console.log(localStorage.getItem('_id'));
+                console.log(localStorage.getItem('token'));
                 onLogin();
                 navigate('/feed'); // Redirigimos al feed
             }

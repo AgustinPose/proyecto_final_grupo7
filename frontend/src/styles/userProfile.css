@@ -1,0 +1,124 @@
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-header {
+    display: flex;
+    justify-content: space-between;
+    width: 75%;
+    padding: 10px 20px;
+    align-items: center;
+  }
+  
+  .profile-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #ddd;
+  }
+  
+  .profile-stats {
+    margin-top: 15px;
+    display: flex;
+    gap: 20px;
+  }
+  
+  .profile-stats span {
+    font-weight: bold;
+  }
+  
+  .edit-button {
+    padding: 8px 15px;
+    background-color: #0095f6;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-right: 75px;
+    margin-bottom: 40px;
+  }
+  
+  .edit-button:hover {
+    background-color: #007bb5;
+  }
+  
+  .profile-description {
+    max-width: 600px;
+    text-align: center;
+    margin: 20px 0;
+  }
+  
+  .posts-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .posts-container img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+  
+  textarea, input {
+    padding: 8px;
+    width: 100%;
+    max-width: 600px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 10px;
+  }
+  
+  .save-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .save-button:hover {
+    background-color: #218838;
+  }
+  
+  .feed-container {
+    margin-top: 40px;
+  }
+  
+  .feed-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+  }
+
+  .feed-item {
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #f0f0f0;
+  }
+  
+  .feed-image {
+    width: 100%;
+    height: auto;
+  }
