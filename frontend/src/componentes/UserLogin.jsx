@@ -1,24 +1,20 @@
 import React, { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Importa useNavigate
+import { useNavigate } from 'react-router-dom'; 
 import { UserContext } from '../App.js';
+import '../css/UserLogin.css';
 
 const UserLogin = ({ onLogin }) => {
-    // Estado para manejar los datos del formulario de login
     const [loginData, setLoginData] = useState({
         email: '',
         password: ''
     });
 
-    // Estado para manejar mensajes de error o éxito
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
 
     const navigate = useNavigate();
-
-    // Accede a setToken desde el contexto
     const { setToken } = useContext(UserContext);
 
-    // Maneja los cambios en el formulario
     const handleChange = (e) => {
         setLoginData({
             ...loginData,
@@ -26,7 +22,6 @@ const UserLogin = ({ onLogin }) => {
         });
     };
 
-    // Maneja el envío del formulario
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -39,70 +34,65 @@ const UserLogin = ({ onLogin }) => {
         })
         .then(response => {
             if (!response.ok) {
-                // Si la respuesta no es ok (401 o algun otro)
                 return response.json().then(data => {
-                    setSuccessMessage(''); // Limpiamos el mensaje de exito
+                    setSuccessMessage('');
                     setErrorMessage(data.message || 'Credenciales incorrectas');
                 });
             }
             return response.json();
         })
         .then(data => {
-            // Si la respuesta es exitosa
             if (data && data.token) {
-                setErrorMessage(''); // Limpiamos mensaje de error
+                setErrorMessage('');
                 setSuccessMessage('Inicio de sesión exitoso!');
-                
-                // Guarda el token usando la función setToken del contexto
-                setToken(data.token); // Aquí es donde guardas el token
-
+                setToken(data.token);
                 onLogin();
-                navigate('/feed'); // Redirigimos al feed
+                navigate('/feed');
             }
         })
         .catch(error => {
-            // Maneja los errores de red
             setErrorMessage('Error de red, por favor inténtalo de nuevo.');
             setSuccessMessage('');
         });
     };
 
     const handleSignUpRedirect = () => {
-        navigate('/signup'); // Redirige a la página de registro
+        navigate('/signup');
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h1>Login</h1>
-            {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-            {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
-            
-            <div>
-                <label htmlFor="email">Email:</label>
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={loginData.email}
-                    onChange={handleChange}
-                    required
-                />
-            </div>
-            <div>
-                <label htmlFor="password">Contraseña:</label>
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    value={loginData.password}
-                    onChange={handleChange}
-                    required
-                />
-            </div>
-            <button type="submit">Ingresar</button>
-            <br />
-            <button type="button" onClick={handleSignUpRedirect}>Regístrate</button>
-        </form>
+        <div className="login-container">
+            <form onSubmit={handleSubmit} className="login-form">
+                <h1>Login</h1>
+                {errorMessage && <p className="error-message">{errorMessage}</p>}
+                {successMessage && <p className="success-message">{successMessage}</p>}
+                
+                <div className="input-group">
+                    <label htmlFor="email">Email:</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={loginData.email}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+                <div className="input-group">
+                    <label htmlFor="password">Contraseña:</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        value={loginData.password}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+                <button type="submit">Ingresar</button>
+                <button type="button" onClick={handleSignUpRedirect}>Regístrate</button>
+            </form>
+        </div>
     );
 };
 

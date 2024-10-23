@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
+import '../css/UserSignUp.css';
 
 const UserSignUp = () => {
-
-    // ESTADO PARA MANEJAR LOS DATOS DEL FORMULARIO
     const [formData, setFormData] = useState({
         username: '',
         email: '',
         password: ''
     });
 
-    // MANEJA LOS CAMBIOS EN EL FORMULARIO
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -19,7 +17,6 @@ const UserSignUp = () => {
     };
 
     const navigate = useNavigate();
-
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -33,70 +30,67 @@ const UserSignUp = () => {
         })
         .then(response => {  
             if (!response.ok) {
-                // Manejo de errores si la respuesta no es OK
                 return response.json().then(data => {
-                    console.log(data.message); // Mostrar el mensaje de error
+                    console.log(data.message);
                 });
             }
             return response.json();
         })
         .then(data => {
-            // Solo se ejecuta si la respuesta es exitosa
             if (data) {
-                console.log('Success:', data); // Mostrar el mensaje de éxito
+                console.log('Success:', data);
             }
         })
         .catch(error => {
-            // Este catch manejará errores de red, pero no imprimirás nada
-            // Puedes omitir este bloque si no quieres manejar errores de red
+            // Manejo de errores de red
         });
     };
     
     const userLoginRedirect = () => {
         navigate('/login');
-    }
-    
+    };
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h1>Register a New User</h1>
-            <div>
-                <label htmlFor="username">Username:</label>
-                <input
-                    type="text"
-                    id="username"
-                    name="username"
-                    value={formData.username}
-                    onChange={handleChange}
-                    required
-                />
-            </div>
-            <div>
-                <label htmlFor="email">Email:</label>
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                />
-            </div>
-            <div>
-                <label htmlFor="password">Password:</label>
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    required
-                />
-            </div>
-            <button type="submit">Sign Up</button>
-            <br />
-            <button type="button" onClick={userLoginRedirect}>Login</button>
-        </form>
+        <div className="signup-container">
+            <form onSubmit={handleSubmit} className="signup-form">
+                <h1>Register a New User</h1>
+                <div className="input-group">
+                    <label htmlFor="username">Username:</label>
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        value={formData.username}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+                <div className="input-group">
+                    <label htmlFor="email">Email:</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+                <div className="input-group">
+                    <label htmlFor="password">Password:</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+                <button type="submit">Sign Up</button>
+                <button type="button" onClick={userLoginRedirect}>Login</button>
+            </form>
+        </div>
     );
 };
 
