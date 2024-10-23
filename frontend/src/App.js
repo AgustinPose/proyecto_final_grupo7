@@ -1,14 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import UserSignUp from './componentes/UserSignUp';
 import UserLogin from './componentes/UserLogin'; // Cambia según el nombre de tu archivo
 import Feed from './views/feed'; // Cambia según el nombre de tu archivo
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-
-
-
 import './App.css';
 
+export const UserContext = createContext();
+
 function App() {
+
+  const {token, setToken} = useState(localStorage.getItem("token") || "");
+  const handleSetToken = (newToken) => {
+    console.log("I am in handleSetToken")
+    localStorage.setItem("token", newToken);
+    setToken(newToken);
+  };
 
   // Inicializa el estado de login verificando el localStorage
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -29,24 +35,26 @@ function App() {
 
   return (
     <div className="App">
-      <Router>
-        <Routes>
-          {/* Ruta para el login */}
-          <Route path="/login" element={<UserLogin onLogin={handleLogin} />} />
+      <UserContext.Provider value={{token, setToken: handleSetToken }}>
+        <Router>
+          <Routes>
+            {/* Ruta para el login */}
+            <Route path="/login" element={<UserLogin onLogin={handleLogin} />} />
 
-          {/* Ruta de signup */}
-          <Route path="/signup" element={<UserSignUp />} />
+            {/* Ruta de signup */}
+            <Route path="/signup" element={<UserSignUp />} />
 
-          {/* Ruta protegida para el feed */}
-          <Route
-            path="/feed"
-            element={isLoggedIn ? <Feed onLogout={handleLogout} /> : <Navigate to="/login" />}
-          />
+            {/* Ruta protegida para el feed */}
+            <Route
+              path="/feed"
+              element={isLoggedIn ? <Feed onLogout={handleLogout} /> : <Navigate to="/login" />}
+            />
 
-          {/* Redirigir a login si no hay ruta */}
-          <Route path="*" element={<Navigate to="/login" />} />
-        </Routes>
-      </Router>
+            {/* Redirigir a login si no hay ruta */}
+            <Route path="*" element={<Navigate to="/login" />} />
+          </Routes>
+        </Router>
+      </UserContext.Provider>
     </div>
   );
 }

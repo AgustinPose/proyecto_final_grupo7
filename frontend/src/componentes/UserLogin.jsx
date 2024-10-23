@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Importa useNavigate
+import { UserContext } from '../App.js';
 
 const UserLogin = ({ onLogin }) => {
     // Estado para manejar los datos del formulario de login
@@ -13,6 +14,9 @@ const UserLogin = ({ onLogin }) => {
     const [successMessage, setSuccessMessage] = useState('');
 
     const navigate = useNavigate();
+
+    // Accede a setToken desde el contexto
+    const { setToken } = useContext(UserContext);
 
     // Maneja los cambios en el formulario
     const handleChange = (e) => {
@@ -45,9 +49,13 @@ const UserLogin = ({ onLogin }) => {
         })
         .then(data => {
             // Si la respuesta es exitosa
-            if (data) {
+            if (data && data.token) {
                 setErrorMessage(''); // Limpiamos mensaje de error
                 setSuccessMessage('Inicio de sesión exitoso!');
+                
+                // Guarda el token usando la función setToken del contexto
+                setToken(data.token); // Aquí es donde guardas el token
+
                 onLogin();
                 navigate('/feed'); // Redirigimos al feed
             }
