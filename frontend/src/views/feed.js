@@ -1,39 +1,56 @@
 import React from 'react';
-import { useNavigate } from 'react-router';
-import '../Feed.css';
-import Img from "../images/playa.jpeg"
-import Matecito from "../images/playita.png"
+import Sidebar from './sidebar'; 
+import '../css/Feed.css';
+import Img from "../images/playa.jpeg";
+import Matecito from "../images/playita.png";
 
-const Feed = () => {
-    const navigate = useNavigate();
-
-    const handleProfilebutton = () => {
-        navigate('/user-profile');
-    };
-
+const Feed = ({ onLogout }) => {
     return (
-        
-        <div className="feed-view">
-            <div className='feed-button-container'>
-                <button onClick={handleProfilebutton}>Ver perfil</button>
-            </div>
-            <header className="feed-header">
-                <h1>R</h1>
-                <p>Donde las conexiones florecen...</p> {/* Nuestro eslogan */}
-            </header>
-            
-            <div className="feed-posts">
-                <div className="post-card">
-                <img src={Matecito} alt="Mateando" /> {/* Acá hay que encarar componente xd*/}
-                    <h3>UsuariazOwO</h3>
-                    <p>En casita, resfriado</p>
+        <div className="feed-layout">
+            <Sidebar />
+
+            <div className="feed-content">
+                {/* Contenedor para el botón de Logout */}
+                <div className="header">
+                    <div className="logout-container">
+                        <button onClick={onLogout} className="logout-button">Cerrar sesión</button>
+                    </div>
                 </div>
-                <div className="post-card">
-                <img src={Img} alt="playa" />
-                    <h3>superUsuarito2004</h3>
-                    <p>Vacacionando en la playa re tranquiiii B)</p>
-                </div>
-                {/* Etcétera */}
+
+                {/* Friends Suggestions */}
+                <aside className="friends-suggestions">
+                    <p className="suggestions-title">Check out your friends</p>
+                    <div className="friends-grid">
+                        <div className="friend-card">
+                            <img src={Img} alt="Friend 1" className="friend-img" />
+                            <div className="friend-info">
+                                <p className="friend-name">Usuario 1</p>
+                                <button className="view-btn">View</button>
+                            </div>
+                        </div>
+                        <div className="friend-card">
+                            <img src={Img} alt="Friend 2" className="friend-img" />
+                            <div className="friend-info">
+                                <p className="friend-name">Usuario 2</p>
+                                <button className="view-btn">View</button>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+
+                {/* Main Content (Posts) */}
+                <main className="main-feed">
+                    <div className="post-card">
+                        <img src={Matecito} alt="Mateando" className="post-img"/>
+                        <h3>UsuariazOwO</h3>
+                        <p>En casita, resfriado</p>
+                    </div>
+                    <div className="post-card">
+                        <img src={Img} alt="playa" className="post-img"/>
+                        <h3>superUsuarito2004</h3>
+                        <p>Vacacionando en la playa re tranquiiii B</p>
+                    </div>
+                </main>
             </div>
         </div>
     );
