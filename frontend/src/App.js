@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import UserSignUp from './componentes/UserSignUp';
-import UserLogin from './componentes/UserLogin'; // Cambia según el nombre de tu archivo
-import Feed from './views/feed'; // Cambia según el nombre de tu archivo
+import UserLogin from './componentes/UserLogin';
+import Feed from './views/feed';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 
@@ -9,37 +9,37 @@ export const UserContext = createContext();
 
 function App() {
 
-  const {token, setToken} = useState(localStorage.getItem("token") || "");
+  // Estado para el token
+  const [token, setToken] = useState(localStorage.getItem("token") || "");
+
+  // Función para manejar el seteo del token y guardarlo en localStorage
   const handleSetToken = (newToken) => {
-    console.log("I am in handleSetToken")
     localStorage.setItem("token", newToken);
     setToken(newToken);
   };
 
-  // Inicializa el estado de login verificando el localStorage
-  const [isLoggedIn, setIsLoggedIn] = useState(() => {
-    return localStorage.getItem('isLoggedIn') === 'true'; // Si existe en localStorage, lo usamos
-  });
+  // Estado de login basado en la existencia del token
+  const [isLoggedIn, setIsLoggedIn] = useState(!!token);
 
-  // Función que se ejecuta cuando el usuario inicia sesión
-  const handleLogin = () => {
-    setIsLoggedIn(true); // Actualiza el estado
-    localStorage.setItem('isLoggedIn', 'true'); // Guarda el estado en localStorage
-  };
+  // Efecto para actualizar el estado de login cuando cambia el token
+  useEffect(() => {
+    setIsLoggedIn(!!token); // Si hay un token, el usuario está logeado
+  }, [token]);
 
   // Función para manejar el logout
   const handleLogout = () => {
-    setIsLoggedIn(false);
-    localStorage.removeItem('isLoggedIn'); // Elimina el estado de localStorage
+    setToken(""); // Limpia el token
+    localStorage.removeItem("token"); // Remuevo el token
+    setIsLoggedIn(false); // booleano para gestionar el loggedin
   };
 
   return (
     <div className="App">
-      <UserContext.Provider value={{token, setToken: handleSetToken }}>
+      <UserContext.Provider value={{ token, setToken: handleSetToken }}>
         <Router>
           <Routes>
             {/* Ruta para el login */}
-            <Route path="/login" element={<UserLogin onLogin={handleLogin} />} />
+            <Route path="/login" element={<UserLogin onLogin={() => setIsLoggedIn(true)} />} />
 
             {/* Ruta de signup */}
             <Route path="/signup" element={<UserSignUp />} />

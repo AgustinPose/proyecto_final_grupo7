@@ -5,12 +5,15 @@ import '../css/Feed.css';
 import Img from "../images/playa.jpeg";
 import Matecito from "../images/playita.png";
 
-const Feed = () => {
+const Feed = ({ onLogout }) => {
     return (
         <div className="feed-layout">
             <Sidebar />
 
             <div className="feed-content">
+                {/* Botón de Logout */}
+                <button onClick={onLogout} className="logout-button">Cerrar sesión</button>
+
                 {/* Friends Suggestions */}
                 <aside className="friends-suggestions">
                     <p>View your friends profile</p>
