@@ -1,50 +1,66 @@
-import React, { useState, useEffect } from 'react';
-import UserSignUp from './componentes/userSignUp';
-import UserLogin from './componentes/UserLogin'; // Cambia según el nombre de tu archivo
-import Feed from './views/feed'; // Cambia según el nombre de tu archivo
+import React, { createContext, useState, useEffect } from 'react';
+import UserSignUp from './componentes/UserSignUp';
+import UserLogin from './componentes/UserLogin';
+import Feed from './views/feed';
+import Profile from './views/Profile';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-
 import './App.css';
+
+export const UserContext = createContext();
 
 function App() {
 
-  // Inicializa el estado de login verificando el localStorage
-  const [isLoggedIn, setIsLoggedIn] = useState(() => {
-    return localStorage.getItem('isLoggedIn') === 'true'; // Si existe en localStorage, lo usamos
-  });
+  // Estado para el token
+  const [token, setToken] = useState(localStorage.getItem("token") || "");
 
-  // Función que se ejecuta cuando el usuario inicia sesión
-  const handleLogin = () => {
-    setIsLoggedIn(true); // Actualiza el estado
-    localStorage.setItem('isLoggedIn', 'true'); // Guarda el estado en localStorage
+  // Función para manejar el seteo del token y guardarlo en localStorage
+  const handleSetToken = (newToken) => {
+    localStorage.setItem("token", newToken);
+    setToken(newToken);
   };
+
+  // Estado de login basado en la existencia del token
+  const [isLoggedIn, setIsLoggedIn] = useState(!!token);
+
+  // Efecto para actualizar el estado de login cuando cambia el token
+  useEffect(() => {
+    setIsLoggedIn(!!token); // Si hay un token, el usuario está logeado
+  }, [token]);
 
   // Función para manejar el logout
   const handleLogout = () => {
-    setIsLoggedIn(false);
-    localStorage.removeItem('isLoggedIn'); // Elimina el estado de localStorage
+    setToken(""); // Limpia el token
+    localStorage.removeItem("token"); // Remuevo el token
+    setIsLoggedIn(false); // booleano para gestionar el loggedin
   };
 
   return (
     <div className="App">
-      <Router>
-        <Routes>
-          {/* Ruta para el login */}
-          <Route path="/login" element={<UserLogin onLogin={handleLogin} />} />
+      <UserContext.Provider value={{ token, setToken: handleSetToken }}>
+        <Router>
+          <Routes>
+            {/* Ruta para el login */}
+            <Route path="/login" element={<UserLogin onLogin={() => setIsLoggedIn(true)} />} />
 
-          {/* Ruta para el signup */}
-          <Route path="/signup" element={<UserSignUp />} />
+            {/* Ruta de signup */}
+            <Route path="/signup" element={<UserSignUp />} />
 
-          {/* Ruta protegida para el feed */}
-          <Route
-            path="/feed"
-            element={isLoggedIn ? <Feed onLogout={handleLogout} /> : <Navigate to="/login" />}
+            {/* Ruta protegida para el feed */}
+            <Route
+              path="/feed"
+              element={isLoggedIn ? <Feed onLogout={handleLogout} /> : <Navigate to="/login" />}
+            />
+
+            {/* Redirigir a login si no hay ruta */}
+            <Route path="*" element={<Navigate to="/login" />} />
+
+            <Route 
+            path="/user-profile"
+            element={isLoggedIn ? <Profile /> : <Navigate to="/login" />}
           />
-
-          {/* Redirigir a login si no hay ruta */}
-          <Route path="*" element={<Navigate to="/login" />} />
-        </Routes>
-      </Router>
+          </Routes>
+        </Router>
+      </UserContext.Provider>
     </div>
   );
 }
