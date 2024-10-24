@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import Sidebar from '../views/sidebar';
+import PerfilDefecto from "../images/perfilDefecto.jpg";
 import "../css/UserProfile.css"
 
 const UserProfile = () => {
@@ -35,38 +37,16 @@ const UserProfile = () => {
         }
 
         const data = await response.json();
-        setProfileData(data);
-        setNewUsername(data.username); 
-        setNewDescription(data.description);
-        setProfileImagePreview(data.profileImage || null); 
+        setProfileData(data.user);
+        setFeedPosts(data.posts);
+        setNewUsername(data.user.username); 
+        setNewDescription(data.user.description);
+        setProfileImagePreview(data.user.profileImage || null); 
       } catch (error) {
         setError(error.message);
       }
     };
-
-    const fetchFeed = async () => {
-        try {
-          const response = await fetch(`http://localhost:3001/api/posts/feed`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
-            }
-          });
-  
-          if (!response.ok) {
-            throw new Error('Error al obtener el feed de publicaciones');
-          }
-  
-          const posts = await response.json();
-          setFeedPosts(posts); // Guardar las publicaciones en el estado
-        } catch (error) {
-          setError(error.message);
-        }
-      };
-
     fetchProfile();
-    fetchFeed();
   }, []);
 
   const handleEditToggle = () => {
@@ -111,72 +91,92 @@ const UserProfile = () => {
   }
 
   return (
-    <div className="profile-container">
-      <div className="profile-header">
-        {profileImagePreview ? (
-          <img 
-            src={profileImagePreview} 
-            alt="Imagen de perfil" 
-            className="profile-image"
-          />
-        ) : (
-          <p>No hay imagen de perfil.</p>
-        )}
-        <div className="profile-info">
-          <h1>
-            {isEditing ? (
-              <input 
-                value={newUsername} 
-                onChange={handleUsernameChange} 
-              />
-            ) : profileData.username}
-          </h1>
-          <div className="profile-stats">
-            <span>{profileData.posts} posts</span>
-            <span>{profileData.friends} friends</span>
-          </div>
-        </div>
-        {isEditing ? (
-          <button className="save-button" onClick={handleSaveChanges}>Guardar cambios</button>
-        ) : (
-          <button className="edit-button" onClick={handleEditToggle}>Editar perfil</button>
-        )}
-      </div>
+    <div className='profile-layout'>
+      <Sidebar />
 
-      <p className="profile-description">
-        {isEditing ? (
-          <textarea 
-            value={newDescription} 
-            onChange={(e) => setNewDescription(e.target.value)} 
-          />
-        ) : profileData.description || 'No hay descripción aún.'}
-      </p>
-
-      {isEditing && (
-        <div>
-          <label>Cambiar imagen de perfil:</label>
-          <input type="file" onChange={handleImageChange} accept="image/*" />
-        </div>
-      )}
-
-        <div className="feed-container">
-            { feedPosts.length > 0 ? (
-                <div className="feed-container">
-                <h2>Feed de Publicaciones</h2>
-                <div className="feed-grid">
-                {feedPosts.map(post => (
-                    <div key={post._id} className="feed-item">
-                    <img src={post.imageUrl} alt={post.description} className="feed-image" />
-                    <p>{post.description}</p>
-                    </div>
-                ))}
-                </div>
-                </div>
-            ) : (
-                <p>No hay publicaciones en el feed.</p>
+      <div className="profile-container">
+        <div className="profile-header">
+          {profileImagePreview ? (
+            <img 
+              src={profileImagePreview} 
+              alt="Imagen de perfil" 
+              className="profile-image"
+            />
+          ) : (
+            <img
+              src={PerfilDefecto}
+              alt="Imagen de perfil"
+              className="profile-image"
+            />
+          )}
+          <div className="profile-info">
+            <h1>
+              {isEditing ? (
+                <>
+                <label htmlFor='username'>Username: </label>
+                <input 
+                  id="username"
+                  value={newUsername} 
+                  onChange={handleUsernameChange} 
+                />
+                </>
+              ) : profileData.username}
+            </h1>
+            {!isEditing && (
+              <div className="profile-stats">
+                <span>{feedPosts.length} posts</span>
+                <span>{profileData.friends.length} friends</span>
+              </div>
             )}
-      </div>
 
+            <p className="profile-description">
+            {isEditing ? (
+              <>
+                <label htmlFor='description'>Description: </label>
+                  <textarea 
+                  id='description'
+                    value={newDescription} 
+                    onChange={(e) => setNewDescription(e.target.value)} 
+                  />
+              </>
+            ) : profileData.description || 'No hay descripción aún.'}
+          </p>
+          </div>
+          {isEditing ? (
+            <button className="save-button" onClick={handleSaveChanges}>Guardar cambios</button>
+          ) : (
+            <button className="edit-button" onClick={handleEditToggle}>Editar perfil</button>
+          )}
+        </div>
+
+        
+
+        {isEditing && (
+          <div className='change-picture-container'>
+            <label htmlFor='image-upload'>Profile image:</label>
+            <input id="image-upload" className="image-input" type="file" onChange={handleImageChange} accept="image/*" />
+          </div>
+        )}
+
+          <div className="feed-container">
+              { feedPosts.length > 0 ? (
+                  <div className="feed-container">
+                  <h2>Feed de Publicaciones</h2>
+                  <div className="feed-grid">
+                  {feedPosts.map(post => (
+                      <div key={post._id} className="feed-item">
+                      <img src={post.imageUrl} alt={post.description} className="feed-image" />
+                      <p>{post.description}</p>
+                      </div>
+                  ))}
+                  </div>
+                  </div>
+              ) : (
+                  <p>No hay publicaciones en el feed.</p>
+              )}
+        </div>
+
+      </div>
     </div>
   );
 };

@@ -48,6 +48,7 @@ const UserLogin = ({ onLogin }) => {
                 setToken(data.token);
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('_id', data._id);
+                console.log(data);
                 onLogin();
                 navigate('/feed');
             }

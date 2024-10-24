@@ -3,6 +3,7 @@ import UserSignUp from './componentes/UserSignUp';
 import UserLogin from './componentes/UserLogin';
 import Feed from './views/feed';
 import Profile from './views/Profile';
+import FriendProfile from './views/FriendProfile';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 
@@ -58,6 +59,12 @@ function App() {
             path="/user-profile"
             element={isLoggedIn ? <Profile /> : <Navigate to="/login" />}
           />
+
+          <Route
+            path="/user-profile/:id"
+            element={isLoggedIn ? <FriendProfile /> : <Navigate to="/login" />}
+          />
+
           </Routes>
         </Router>
       </UserContext.Provider>
