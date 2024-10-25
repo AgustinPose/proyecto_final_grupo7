@@ -41,7 +41,7 @@ const UserProfile = () => {
         setFeedPosts(data.posts);
         setNewUsername(data.user.username); 
         setNewDescription(data.user.description);
-        setProfileImagePreview(data.user.profileImage || null); 
+        setProfileImagePreview(data.user.profilePicture || null); 
       } catch (error) {
         setError(error.message);
       }
@@ -58,17 +58,49 @@ const UserProfile = () => {
   };
 
   const handleSaveChanges = async () => {
-    // Enviar los cambios del perfil (falta un endpoint PUT o PATCH para guardar los cambios en el back)
+    const token = localStorage.getItem('token');
+  
+    if (!token) {
+      setError('Usuario no autenticado. Por favor, inicie sesión.');
+      return;
+    }
+  
     const formData = new FormData();
     formData.append('username', newUsername);
-    formData.append('description', newDescription);
+  
+    // Solo agrega la imagen si el usuario ha subido una nueva imagen
     if (profileImage) {
-      formData.append('profileImage', profileImage); 
+      formData.append('profilePicture', profileImage);
     }
-
-    // Aquí se envia el `formData` al backend si hubiera el endpoint adecuado
-    setProfileData({ ...profileData, username: newUsername, description: newDescription });
-    setIsEditing(false);
+  
+    try {
+      const response = await fetch(`http://localhost:3001/api/user/profile/edit`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        body: formData
+      });
+  
+      if (!response.ok) {
+        throw new Error('Error al actualizar el perfil');
+      }
+  
+      const data = await response.json();
+  
+      // Actualiza los datos del perfil, incluida la imagen en formato base64
+      setProfileData({ 
+        ...profileData, 
+        username: data.user.username, 
+        profilePicture: data.user.profilePicture 
+      });
+  
+      // Actualiza la vista previa de la imagen en base a la nueva imagen en base64
+      setProfileImagePreview(data.user.profilePicture); // Aquí deberías usar la imagen base64 devuelta
+      setIsEditing(false);
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   const handleImageChange = (e) => {
@@ -158,6 +190,7 @@ const UserProfile = () => {
           </div>
         )}
 
+          {!isEditing && (  
           <div className="feed-container">
               { feedPosts.length > 0 ? (
                   <div className="feed-container">
@@ -173,9 +206,9 @@ const UserProfile = () => {
                   </div>
               ) : (
                   <p>No hay publicaciones en el feed.</p>
-              )}
+              )} 
         </div>
-
+          )}
       </div>
     </div>
   );
