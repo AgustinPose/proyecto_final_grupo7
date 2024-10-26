@@ -61,7 +61,7 @@ function App() {
           />
 
           <Route
-            path="/user-profile/:id"
+            path="/user-profile/:friendId"
             element={isLoggedIn ? <FriendProfile /> : <Navigate to="/login" />}
           />
 

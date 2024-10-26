@@ -103,3 +103,25 @@ h1 {
     font-size: 1rem;
     color: #666;
 }
+
+
+.friend-button {
+    background-color: grey;
+    padding: 8px 16px;
+    width: 120px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .friend-button:hover {
+    background-color: #555;
+  }	
+  
+  .friend-button.is-friend {
+    background-color: blue; /* Color cuando son amigos */
+    color: white; /* Color de texto cuando son amigos */
+  }
+  
