@@ -55,18 +55,20 @@ const Feed = ({ onLogout }) => {
                 </div>
 
                 {/* Friends Suggestions */}
-                <aside className="friends-suggestions">
-                    <p className="suggestions-title">Check out your friends</p>
-                    <div className="friends-grid">
-                        {friends.map(friend => (
-                            <div key={friend._id} className="friend-card">
-                                <img src={friend.profilePicture || PerfilDefecto} alt={friend.username} className="friend-img" />
-                                <div className="friend-info">
-                                    <p className="friend-name">{friend.username}</p>
-                                    <button className="view-btn" onClick={() => handleFriendProfileClick(friend._id)}>View</button>
+                <aside className="friends-suggestions-container">
+                    <h2 className="suggestions-title">Check out your friends</h2>
+                    <div className="friends-suggestions">
+                        <div className="friends-scroll">
+                            {friends.map(friend => (
+                                <div key={friend._id} className="friend-card">
+                                    <img src={friend.profilePicture || PerfilDefecto} alt={friend.username} className="friend-img" />
+                                    <div className="friend-info">
+                                        <p className="friend-name">{friend.username}</p>
+                                        <button className="view-btn" onClick={() => handleFriendProfileClick(friend._id)}>View</button>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
+                        </div>
                     </div>
                 </aside>
 

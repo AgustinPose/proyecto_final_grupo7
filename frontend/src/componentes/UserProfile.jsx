@@ -59,27 +59,30 @@ const UserProfile = () => {
 
   const handleSaveChanges = async () => {
     const token = localStorage.getItem('token');
-  
+    
     if (!token) {
       setError('Usuario no autenticado. Por favor, inicie sesión.');
       return;
     }
   
-    const formData = new FormData();
-    formData.append('username', newUsername);
+    // Preparar datos a enviar como JSON
+    const updatedData = {
+      username: newUsername,
+    };
   
-    // Solo agrega la imagen si el usuario ha subido una nueva imagen
-    if (profileImage) {
-      formData.append('profilePicture', profileImage);
+    // Solo agregar la imagen si existe una nueva
+    if (profileImagePreview) {
+      updatedData.profilePicture = profileImagePreview;  // Pasar la imagen en base64
     }
-  
+    
     try {
       const response = await fetch(`http://localhost:3001/api/user/profile/edit`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
         },
-        body: formData
+        body: JSON.stringify(updatedData)
       });
   
       if (!response.ok) {
@@ -88,20 +91,21 @@ const UserProfile = () => {
   
       const data = await response.json();
   
-      // Actualiza los datos del perfil, incluida la imagen en formato base64
+      // Actualizar datos del perfil en el estado
       setProfileData({ 
         ...profileData, 
         username: data.user.username, 
         profilePicture: data.user.profilePicture 
       });
   
-      // Actualiza la vista previa de la imagen en base a la nueva imagen en base64
-      setProfileImagePreview(data.user.profilePicture); // Aquí deberías usar la imagen base64 devuelta
+      // Actualizar vista previa de la imagen
+      setProfileImagePreview(data.user.profilePicture);
       setIsEditing(false);
     } catch (error) {
       setError(error.message);
     }
   };
+  
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
