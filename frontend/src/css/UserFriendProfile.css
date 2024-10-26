@@ -125,3 +125,14 @@ h1 {
     color: white; /* Color de texto cuando son amigos */
   }
   
+  .follow-friend-button {
+    /* Estilos por defecto */
+    background-color: #f0f0f0; /* Color gris o el que prefieras */
+    color: #000; /* Color del texto */
+  }
+  
+  .follow-friend-button.friend-button {
+    background-color: blue; /* Cambiar a azul */
+    color: white; /* Texto blanco */
+  }
+  
