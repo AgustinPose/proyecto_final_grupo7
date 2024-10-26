@@ -1,9 +1,10 @@
 /* General Layout */
 .feed-layout {
-    display: flex;
-    height: 100vh;
-    background-color: #fafafa;
-  }
+  display: flex;
+  height: 100vh; /* Altura total de la ventana */
+  overflow: hidden; /* Previene el scroll en el contenedor principal */
+  background-color: #fafafa;
+}
   
   /* Sidebar */
   .sidebar {
@@ -19,7 +20,9 @@
     padding: 20px;
     display: flex;
     flex-direction: column;
-  }
+    height: 100vh; /* Altura total */
+    overflow-y: auto; /* Permite scroll vertical solo en el contenido */
+}
   
   /* Header with logout button */
   .header {
@@ -50,22 +53,29 @@
   .logout-button:hover {
     background-color: #e64a19;
   }
-  
-  /* Friends Suggestions */
-  .friends-suggestions {
+
+  .friends-suggestions-container {
+    width: 90%;
+    margin-bottom: 30px;
     background-color: white;
-    padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 30px;
-  }
+    padding: 20px;
+    flex-shrink: 0; /* Previene que el contenedor se encoja */
+}
+
   
-  .suggestions-title {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 15px;
-    text-align: center;
-  }
+.friends-suggestions {
+  width: 100%;
+  position: relative;
+}
+  
+.suggestions-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-align: center;
+}
   
   .friends-grid {
     display: grid;
@@ -73,63 +83,68 @@
     grid-gap: 15px;
   }
   
-  /* Friend Card */
   .friend-card {
+    flex: 0 0 auto;
     background-color: #fff;
     border-radius: 10px;
     padding: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease;
-  }
+    min-width: 120px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.2s ease;
+}
+
+.friend-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
   
-  .friend-card:hover {
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-  }
+
+.friend-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+  object-fit: cover;
+}
   
-  .friend-img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    margin-right: 10px;
-  }
+.friend-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
   
-  .friend-info {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
+.friend-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  margin: 0;
+}
   
-  .friend-name {
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 8px;
-    color: #333;
-  }
-  
-  .view-btn {
-    background-color: #666;
-    color: white;
-    border: none;
-    padding: 3px 6px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-size: 0.9rem;
-  }
-  
-  .view-btn:hover {
-    background-color: #555;
-  }
+
+.view-btn {
+  background-color: #666;
+  color: white;
+  border: none;
+  padding: 4px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background-color 0.3s ease;
+}
+
+.view-btn:hover {
+  background-color: #555;
+}
   
   /* Main Feed Content */
   .main-feed {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     grid-gap: 20px;
-  }
+    padding-bottom: 20px; /* Espacio al final del contenido */
+}
   
   .post-card {
     background-color: white;
@@ -178,4 +193,31 @@
     padding: 0;
   }
   
+  .friends-scroll {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 10px;
+    width: 100%;
+    -ms-overflow-style: none; /* Para IE y Edge */
+    scrollbar-width: thin; /* Para Firefox */
+}
+.friends-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.friends-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.friends-scroll::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.friends-scroll::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
   
