@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import Sidebar from './sidebar'; 
+import Sidebar from '../componentes/Sidebar';
 import '../css/Feed.css';
+import '../css/sidebar.css';
 import PerfilDefecto from "../images/perfilDefecto.jpg";    
 import Img from "../images/playa.jpeg";
 import Matecito from "../images/playita.png";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons'; // Icono de cerrar sesión
 
 const Feed = ({ onLogout }) => {
     const navigate = useNavigate();
@@ -27,9 +30,8 @@ const Feed = ({ onLogout }) => {
                 }
                 const data = await response.json();
                 
-                // Filtrar los amigos para excluir al usuario actual
                 const filteredFriends = data.filter(friend => friend._id !== currentUserId);
-                setFriends(filteredFriends); // Actualizar el estado con los amigos filtrados
+                setFriends(filteredFriends);
             } catch (error) {
                 console.error(error);
             }
@@ -39,7 +41,7 @@ const Feed = ({ onLogout }) => {
     }, [currentUserId]);
 
     const handleFriendProfileClick = (friendId) => {
-        navigate(`/user-profile/${friendId}`); // Navegar al perfil del amigo usando su ID
+        navigate(`/user-profile/${friendId}`);
     }
 
     return (
@@ -47,10 +49,10 @@ const Feed = ({ onLogout }) => {
             <Sidebar />
 
             <div className="feed-content">
-                {/* Contenedor para el botón de Logout */}
+                {/* Header con botón de Logout */}
                 <div className="header">
                     <div className="logout-container">
-                        <button onClick={onLogout} className="logout-button">Cerrar sesión</button>
+                        <FontAwesomeIcon onClick={onLogout}icon={faSignOutAlt} className="logout-icon" />
                     </div>
                 </div>
 
@@ -74,7 +76,6 @@ const Feed = ({ onLogout }) => {
 
                 {/* Main Content (Posts) */}
                 <main className="main-feed">
-                    {/* Aquí puedes seguir agregando tus publicaciones */}
                     <div className="post-card">
                         <img src={Matecito} alt="Mateando" className="post-img"/>
                         <h3>UsuariazOwO</h3>

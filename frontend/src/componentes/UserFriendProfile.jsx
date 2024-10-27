@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Sidebar from '../views/sidebar';
+import Sidebar from '../componentes/Sidebar';
 import "../css/UserFriendProfile.css";
 import PerfilDefecto from '../images/perfilDefecto.jpg';
 

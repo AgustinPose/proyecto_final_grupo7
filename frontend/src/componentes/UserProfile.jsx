@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Sidebar from '../views/sidebar';
+import Sidebar from '../componentes/Sidebar';
 import PerfilDefecto from "../images/perfilDefecto.jpg";
-import "../css/UserProfile.css";
+import "../css/UserProfile.css"
 
 const UserProfile = () => {
   const [profileData, setProfileData] = useState(null);
@@ -59,26 +59,30 @@ const UserProfile = () => {
 
   const handleSaveChanges = async () => {
     const token = localStorage.getItem('token');
-  
+    
     if (!token) {
       setError('Usuario no autenticado. Por favor, inicie sesión.');
       return;
     }
   
-    const formData = new FormData();
-    formData.append('username', newUsername);
+    // Preparar datos a enviar como JSON
+    const updatedData = {
+      username: newUsername,
+    };
   
-    if (profileImage) {
-      formData.append('profilePicture', profileImage);
+    // Solo agregar la imagen si existe una nueva
+    if (profileImagePreview) {
+      updatedData.profilePicture = profileImagePreview;  // Pasar la imagen en base64
     }
-  
+    
     try {
       const response = await fetch(`http://localhost:3001/api/user/profile/edit`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
         },
-        body: formData
+        body: JSON.stringify(updatedData)
       });
   
       if (!response.ok) {
@@ -86,17 +90,22 @@ const UserProfile = () => {
       }
   
       const data = await response.json();
+  
+      // Actualizar datos del perfil en el estado
       setProfileData({ 
         ...profileData, 
         username: data.user.username, 
         profilePicture: data.user.profilePicture 
       });
+  
+      // Actualizar vista previa de la imagen
       setProfileImagePreview(data.user.profilePicture);
       setIsEditing(false);
     } catch (error) {
       setError(error.message);
     }
   };
+  
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -107,32 +116,6 @@ const UserProfile = () => {
       setProfileImagePreview(reader.result);
     };
     reader.readAsDataURL(file);
-  };
-
-  // Función para agregar un amigo
-  const handleAddFriend = async (friendId) => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:3001/api/user/add-friend/${friendId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (response.ok) {
-        // Actualiza el estado de friends en profileData
-        setProfileData((prevData) => ({
-          ...prevData,
-          friends: [...prevData.friends, friendId]
-        }));
-      } else {
-        throw new Error("No se pudo agregar el amigo");
-      }
-    } catch (error) {
-      setError(error.message);
-    }
   };
 
   if (error) {
@@ -202,6 +185,8 @@ const UserProfile = () => {
           )}
         </div>
 
+        
+
         {isEditing && (
           <div className='change-picture-container'>
             <label htmlFor='image-upload'>Profile image:</label>
@@ -209,25 +194,25 @@ const UserProfile = () => {
           </div>
         )}
 
-        {!isEditing && (  
+          {!isEditing && (  
           <div className="feed-container">
-            {feedPosts.length > 0 ? (
-              <div className="feed-container">
-                <h2>Feed de Publicaciones</h2>
-                <div className="feed-grid">
+              { feedPosts.length > 0 ? (
+                  <div className="feed-container">
+                  <h2>Feed de Publicaciones</h2>
+                  <div className="feed-grid">
                   {feedPosts.map(post => (
-                    <div key={post._id} className="feed-item">
+                      <div key={post._id} className="feed-item">
                       <img src={post.imageUrl} alt={post.description} className="feed-image" />
                       <p>{post.description}</p>
-                    </div>
+                      </div>
                   ))}
-                </div>
-              </div>
-            ) : (
-              <p>No hay publicaciones en el feed.</p>
-            )}
-          </div>
-        )}
+                  </div>
+                  </div>
+              ) : (
+                  <p>No hay publicaciones en el feed.</p>
+              )} 
+        </div>
+          )}
       </div>
     </div>
   );
