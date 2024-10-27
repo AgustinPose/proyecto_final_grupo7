@@ -13,9 +13,24 @@ const UserProfileFriend = () => {
   const [feedPosts, setFeedPosts] = useState([]);
   const currentUserId = localStorage.getItem("_id");
 
-  const loadFriendData = async () => {
+  // Definir la función fetchProfile dentro del componente
+  const fetchProfile = async () => {
     const token = localStorage.getItem('token');
     try {
+      const currentUserResponse = await fetch(`http://localhost:3001/api/user/profile/${currentUserId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!currentUserResponse.ok) {
+        const responseText = await currentUserResponse.text();
+        throw new Error(`Error al obtener los datos del usuario actual: ${responseText}`);
+      }
+
+      const currentUserData = await currentUserResponse.json();
       const response = await fetch(`http://localhost:3001/api/user/profile/${friendId}`, {
         method: 'GET',
         headers: {
@@ -25,15 +40,24 @@ const UserProfileFriend = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Error al obtener los datos del perfil');
+        const responseText = await response.text();
+        throw new Error(`Error al obtener los datos del perfil: ${responseText}`);
       }
 
       const data = await response.json();
-      setFriendData(data.user);
-      setFeedPosts(data.user.posts || []);
+      setFriendData({
+        ...data.user,
+        friendsCount: data.user.friends.length
+      });
+      setFeedPosts(data.posts || []);
+
+      const friendsList = currentUserData.user.friends || [];
+      setIsFriend(friendsList.some(friend => friend._id === friendId));
 
     } catch (error) {
       setError(error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -45,78 +69,47 @@ const UserProfileFriend = () => {
       return;
     }
 
-    const fetchProfile = async () => {
-      try {
-        const currentUserResponse = await fetch(`http://localhost:3001/api/user/profile/${currentUserId}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          }
-        });
-
-        if (!currentUserResponse.ok) {
-          throw new Error('Error al obtener los datos del usuario actual');
-        }
-
-        const currentUserData = await currentUserResponse.json();
-        const response = await fetch(`http://localhost:3001/api/user/profile/${friendId}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          }
-        });
-
-        if (!response.ok) {
-          throw new Error('Error al obtener los datos del perfil');
-        }
-
-        const data = await response.json();
-        setFriendData({
-          ...data.user,
-          friendsCount: data.user.friends.length
-        });
-        setFeedPosts(data.user.posts || []);
-
-        const friendsList = currentUserData.user.friends || [];
-        setIsFriend(friendsList.some(friend => friend._id === friendId));
-
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchProfile();
-  }, [friendId, currentUserId]);
+  }, [friendId, currentUserId, isFriend]);
 
-  const handleAddFriend = async () => {
+  const handleFriendAction = async () => {
     const token = localStorage.getItem('token');
-
+    
     try {
-      const response = await fetch(`http://localhost:3001/api/user/add-friend/${friendId}`, {
-        method: 'POST',
+      const endpoint = isFriend ? 'remove-friend' : 'add-friend';
+      const response = await fetch(`http://localhost:3001/api/user/${endpoint}/${friendId}`, {
+        method: 'PUT', // Cambiado de POST a PUT
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         }
       });
-
-      const data = await response.json();
-
+  
       if (!response.ok) {
-        throw new Error(data.message);
+        const responseText = await response.text();
+        throw new Error(`Error al actualizar el estado de la amistad: ${responseText}`);
       }
-
-      setIsFriend(true);
-      await loadFriendData();
-
+  
+      const data = await response.json();
+      setIsFriend(!isFriend);
+      
+      // Actualizar datos del amigo con la nueva respuesta del servidor
+      if (data.updatedFriend) {
+        setFriendData(prevData => ({
+          ...prevData,
+          ...data.updatedFriend,
+          friends: data.updatedFriend.friends
+        }));
+      }
+  
+      // Recargar datos del amigo para asegurarse de tener el estado más reciente
+      await fetchProfile();
+  
     } catch (error) {
       setError(error.message);
+      console.error("Error updating friend status:", error);
     }
-  };
+  };  
 
   if (isLoading) return <div>Cargando...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -143,28 +136,10 @@ const UserProfileFriend = () => {
           </div>
           <button
             className={`follow-friend-button ${isFriend ? 'friend-button' : ''}`}
-            onClick={handleAddFriend}
-            disabled={isFriend}
+            onClick={handleFriendAction}
           >
             {isFriend ? "Amigos" : "Añadir amigo"}
           </button>
-        </div>
-        <div className="feed-friend-container">
-          {feedPosts.length > 0 ? (
-            <div>
-              <h2>Feed de Publicaciones</h2>
-              <div className="feed-friend-grid">
-                {feedPosts.map(post => (
-                  <div key={post._id} className="feed-friend-item">
-                    <img src={post.imageUrl} alt={post.description} className="feed-friend-image" />
-                    <p>{post.description}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ) : (
-            <p>No hay publicaciones en el feed.</p>
-          )}
         </div>
       </div>
     </div>
