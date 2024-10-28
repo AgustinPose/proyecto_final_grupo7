@@ -1,0 +1,78 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7); /* Fondo oscuro semi-transparente */
+    display: flex;
+    align-items: center; /* Centrar verticalmente */
+    justify-content: center; /* Centrar horizontalmente */
+    z-index: 1000; /* Asegúrate de que esté por encima de otros elementos */
+}
+
+.modal-content {
+    position: relative;
+    width: 90%; /* Ancho del modal */
+    max-width: 600px; /* Ancho máximo del modal */
+    margin: 0 auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    overflow: hidden; /* Para evitar que el contenido se desborde */
+}
+
+.modal-image {
+    margin-top: 10px;
+    border-radius: 5px;
+    width: 100%; /* Hace que la imagen ocupe todo el ancho disponible */
+    height: auto; /* Mantiene la proporción de la imagen */
+}
+
+
+.close-button, .modal-button {
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    padding: 8px 16px;
+    background-color: #666;
+}
+
+.close-button:hover {
+    background-color: #555;
+}
+
+@media (max-width: 768px) {
+    .modal-content {
+        padding: 15px; /* Reducir el padding en pantallas más pequeñas */
+    }
+
+    .modal-image {
+        border-radius: 0; /* Quitar esquinas redondeadas en móviles */
+    }
+}
+
+.like-button-modal {
+    width: 50px; /* Ajusta el tamaño según lo necesites */
+  height: 50px; /* Ajusta el tamaño según lo necesites */
+  background-image: url('frontend/src/images/like.png');
+  background-size: cover; /* Asegúrate de que la imagen cubra el botón */
+  border: none; /* Sin borde para que parezca solo una imagen */
+  cursor: pointer; /* Cambia el cursor al pasar el mouse */
+  background-color: transparent;
+}
+
+.like-button-modal:hover {
+    background-color: #888;
+}
+
+.like-text-modal {
+    font-size: 16px;
+    margin-left: 10px;
+    color: #333;
+
+}
+
+
