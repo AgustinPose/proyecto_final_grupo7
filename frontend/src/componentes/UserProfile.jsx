@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from '../componentes/Sidebar';
 import PerfilDefecto from "../images/perfilDefecto.jpg";
+import Modal from '../views/Modal';
 import "../css/UserProfile.css"
 
 const UserProfile = () => {
@@ -12,6 +13,7 @@ const UserProfile = () => {
   const [profileImage, setProfileImage] = useState(null);
   const [profileImagePreview, setProfileImagePreview] = useState(null);
   const [feedPosts, setFeedPosts] = useState([]);
+  const [selectedPostId, setSelectedPostId] = useState(null);
 
   useEffect(() => {
     const userId = localStorage.getItem('_id');
@@ -118,6 +120,16 @@ const UserProfile = () => {
     reader.readAsDataURL(file);
   };
 
+  const openPostDetails = (postId) => {
+    setSelectedPostId(postId);
+  };
+
+  const closePostDetails = () => {
+      setSelectedPostId(null);
+  };
+
+  const selectedPost = feedPosts.find(post => post._id === selectedPostId);
+
   if (error) {
     return <p>{error}</p>;
   }
@@ -196,23 +208,27 @@ const UserProfile = () => {
 
           {!isEditing && (  
           <div className="feed-container">
-              { feedPosts.length > 0 ? (
-                  <div className="feed-container">
-                  <h2>Feed de Publicaciones</h2>
-                  <div className="feed-grid">
-                  {feedPosts.map(post => (
-                      <div key={post._id} className="feed-item">
-                      <img src={post.imageUrl} alt={post.description} className="feed-image" />
+          {feedPosts.length > 0 ? (
+            <div className="feed-container">
+              <h2>Feed de Publicaciones</h2>
+              <div className="feed-grid">
+                {feedPosts.map(post => {
+                  const fullImageUrl = `http://localhost:3001/${post.imageUrl.replace(/\\/g, '/')}`;
+                  return (
+                    <div key={post._id} className="feed-item" onClick={() => openPostDetails(post._id)}>
+                      <img src={fullImageUrl} alt={post.description} className="feed-image" />
                       <p>{post.description}</p>
-                      </div>
-                  ))}
-                  </div>
-                  </div>
-              ) : (
-                  <p>No hay publicaciones en el feed.</p>
-              )} 
-        </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ) : (
+            <p>No hay publicaciones en el feed.</p>
           )}
+        </div>        
+          )}
+          <Modal isOpen={selectedPostId !== null} onClose={closePostDetails} post={selectedPost} />
       </div>
     </div>
   );
