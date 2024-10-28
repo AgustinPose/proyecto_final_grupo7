@@ -44,6 +44,7 @@ const UserProfile = () => {
         setNewUsername(data.user.username); 
         setNewDescription(data.user.description);
         setProfileImagePreview(data.user.profilePicture || null); 
+        console.log(data.user.token);
       } catch (error) {
         setError(error.message);
       }
