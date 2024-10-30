@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import Sidebar from '../componentes/Sidebar';
+import PostDetails from '../componentes/PostDetails'; // Importa PostDetails
 import Modal from '../views/Modal';
 import '../css/Feed.css';
 import '../css/sidebar.css';
 import PerfilDefecto from "../images/perfilDefecto.jpg";
-import Like from "../images/like.png";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
@@ -20,21 +20,31 @@ const Feed = ({ onLogout }) => {
     useEffect(() => {
         const fetchFeed = async () => {
             try {
+                console.log("Fetching posts...");
+                console.log("Token:", token); // Verifica que el token esté presente
+
                 const response = await fetch('http://localhost:3001/api/posts/feed', {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
                 });
+
+                console.log("Response status:", response.status); // Verifica el estado de la respuesta
+
                 if (!response.ok) throw new Error('Error al obtener el feed');
+
                 const data = await response.json();
+                console.log("Data fetched:", data); // Verifica los datos obtenidos
+
                 const sortedPosts = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-                setPosts(sortedPosts); // Almacenar el feed en el estado
+                setPosts(sortedPosts);
             } catch (error) {
-                console.error(error);
+                console.error("Fetch feed error:", error);
             }
         };
-        fetchFeed();
+        
+        fetchFeed(); // Ejecuta la función fetchFeed
     }, [token]);
 
     useEffect(() => {
@@ -78,8 +88,8 @@ const Feed = ({ onLogout }) => {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             if (response.ok) {
-                const updatedPost = await response.json(); // Obtener los datos del post actualizado
-                handleLikeUpdate(postId, updatedPost.likes); // Actualizar el estado con los nuevos "likes"
+                const updatedPost = await response.json();
+                handleLikeUpdate(postId, updatedPost.likes);
             }
         } catch (error) {
             console.error("Error al dar like", error);
@@ -136,16 +146,17 @@ const Feed = ({ onLogout }) => {
                                 <img src={fullImageUrl} alt={post.caption} className="post-img" />
                                 <h3>{post.user.username}</h3>
                                 <p>{post.caption}</p>
-                                <div class="like-container">
-                                    <span class="like-text">Like</span>
-                                    <button onClick="handleLike()" class="like-button" aria-label="Like"></button>
-                                </div>
                             </div>
                         );
                     })}
                 </main>
 
-                <Modal isOpen={selectedPostId !== null} onClose={closePostDetails} post={selectedPost} onLike={() => handleLike(selectedPostId)} />
+                {/* Renderiza PostDetails dentro del Modal */}
+                {selectedPost && (
+                    <Modal isOpen={selectedPostId !== null} onClose={closePostDetails}>
+                        <PostDetails post={selectedPost} closeDetails={closePostDetails} />
+                    </Modal>
+                )}
             </div>
         </div>
     );
