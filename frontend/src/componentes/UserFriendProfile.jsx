@@ -24,12 +24,12 @@ const UserProfileFriend = () => {
           'Authorization': `Bearer ${token}`
         }
       });
-
+  
       if (!currentUserResponse.ok) {
         const responseText = await currentUserResponse.text();
         throw new Error(`Error al obtener los datos del usuario actual: ${responseText}`);
       }
-
+  
       const currentUserData = await currentUserResponse.json();
       const response = await fetch(`http://localhost:3001/api/user/profile/${friendId}`, {
         method: 'GET',
@@ -38,22 +38,23 @@ const UserProfileFriend = () => {
           'Authorization': `Bearer ${token}`
         }
       });
-
+  
       if (!response.ok) {
         const responseText = await response.text();
         throw new Error(`Error al obtener los datos del perfil: ${responseText}`);
       }
-
+  
       const data = await response.json();
+      // Aquí actualiza friendData y friendsCount directamente desde la respuesta
       setFriendData({
         ...data.user,
-        friendsCount: data.user.friends.length
+        friendsCount: data.user.friends.length // Asegúrate de que esto obtenga el valor correcto
       });
       setFeedPosts(data.posts || []);
-
+  
       const friendsList = currentUserData.user.friends || [];
       setIsFriend(friendsList.some(friend => friend._id === friendId));
-
+  
     } catch (error) {
       setError(error.message);
     } finally {
@@ -70,15 +71,17 @@ const UserProfileFriend = () => {
     }
 
     fetchProfile();
-  }, [friendId, currentUserId, isFriend]);
+  }, [friendId, currentUserId]);
 
   const handleFriendAction = async () => {
     const token = localStorage.getItem('token');
-    
+  
     try {
       const endpoint = isFriend ? 'remove-friend' : 'add-friend';
+      const method = isFriend ? 'DELETE' : 'POST';  // Usa DELETE si es remove-friend
+  
       const response = await fetch(`http://localhost:3001/api/user/${endpoint}/${friendId}`, {
-        method: 'PUT', // Cambiado de POST a PUT
+        method: method,
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -90,26 +93,21 @@ const UserProfileFriend = () => {
         throw new Error(`Error al actualizar el estado de la amistad: ${responseText}`);
       }
   
-      const data = await response.json();
+      // Cambiar el estado de isFriend
       setIsFriend(!isFriend);
-      
-      // Actualizar datos del amigo con la nueva respuesta del servidor
-      if (data.updatedFriend) {
-        setFriendData(prevData => ({
-          ...prevData,
-          ...data.updatedFriend,
-          friends: data.updatedFriend.friends
-        }));
-      }
   
-      // Recargar datos del amigo para asegurarse de tener el estado más reciente
-      await fetchProfile();
+      // Actualizar el contador de amigos directamente
+      setFriendData(prevData => ({
+        ...prevData,
+        friendsCount: isFriend ? prevData.friendsCount - 1 : prevData.friendsCount + 1, // Actualiza el conteo
+        friends: isFriend ? prevData.friends.filter(friend => friend._id !== friendId) : [...prevData.friends, { _id: friendId }] // Actualiza la lista de amigos
+      }));
   
     } catch (error) {
       setError(error.message);
       console.error("Error updating friend status:", error);
     }
-  };  
+  };
 
   if (isLoading) return <div>Cargando...</div>;
   if (error) return <div>Error: {error}</div>;
