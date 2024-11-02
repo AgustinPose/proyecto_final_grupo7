@@ -1,42 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import PostDetails from '../componentes/PostDetails'; // Importa PostDetails
+import PostDetails from '../componentes/PostDetails';
 import Modal from '../views/Modal';
 import SidebarContainer from '../componentes/SidebarControlador';
 import '../css/Feed.css';
 import '../css/sidebar.css';
 import PerfilDefecto from "../images/perfilDefecto.jpg";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faSignOutAlt, faSearch } from '@fortawesome/free-solid-svg-icons'; // Importa el ícono de búsqueda
 
 const Feed = ({ onLogout }) => {
     const navigate = useNavigate();
     const [friends, setFriends] = useState([]);
     const [posts, setPosts] = useState([]);
     const [selectedPostId, setSelectedPostId] = useState(null);
+    const [searchTerm, setSearchTerm] = useState(''); // Estado para el término de búsqueda
     const currentUserId = localStorage.getItem('userId');
     const token = localStorage.getItem('token');
 
     useEffect(() => {
         const fetchFeed = async () => {
             try {
-                console.log("Fetching posts...");
-                console.log("Token:", token); // Verifica que el token esté presente
-
                 const response = await fetch('http://localhost:3001/api/posts/feed', {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
                 });
-
-                console.log("Response status:", response.status); // Verifica el estado de la respuesta
-
                 if (!response.ok) throw new Error('Error al obtener el feed');
-
                 const data = await response.json();
-                console.log("Data fetched:", data); // Verifica los datos obtenidos
-
                 const sortedPosts = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
                 setPosts(sortedPosts);
             } catch (error) {
@@ -44,7 +36,7 @@ const Feed = ({ onLogout }) => {
             }
         };
 
-        fetchFeed(); // Ejecuta la función fetchFeed
+        fetchFeed();
     }, [token]);
 
     useEffect(() => {
@@ -57,7 +49,6 @@ const Feed = ({ onLogout }) => {
                     }
                 });
                 if (!response.ok) throw new Error('Error al obtener amigos');
-
                 const data = await response.json();
                 const filteredFriends = data.filter(friend => friend._id !== currentUserId);
                 setFriends(filteredFriends);
@@ -106,6 +97,11 @@ const Feed = ({ onLogout }) => {
 
     const selectedPost = posts.find(post => post._id === selectedPostId);
 
+    // Filtra amigos según el término de búsqueda
+    const filteredFriends = friends.filter(friend =>
+        friend.username.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     return (
         <div className="feed-layout">
             <SidebarContainer />
@@ -120,9 +116,19 @@ const Feed = ({ onLogout }) => {
 
                 <aside className="friends-suggestions-container">
                     <h2 className="suggestions-title">Check out your friends</h2>
+                    <div className="search-container">
+                        <input
+                            type="text"
+                            placeholder="Buscar amigo por nombre de usuario"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)} // Actualiza el término de búsqueda
+                            className="search-input"
+                        />
+                        <FontAwesomeIcon icon={faSearch} className="search-icon" /> {/* Icono de búsqueda */}
+                    </div>
                     <div className="friends-suggestions">
                         <div className="friends-scroll">
-                            {friends.map(friend => (
+                            {filteredFriends.map(friend => (
                                 <div key={friend._id} className="friend-card">
                                     <img src={friend.profilePicture || PerfilDefecto} alt={friend.username} className="friend-img" />
                                     <div className="friend-info">
@@ -137,7 +143,6 @@ const Feed = ({ onLogout }) => {
 
                 <main className="main-feed">
                     {posts.map(post => {
-                        console.log(post.imageUrl); // Verifica el valor de imageUrl
                         const fullImageUrl = `http://localhost:3001/${post.imageUrl.replace(/\\/g, '/')}`;
                         return (
                             <div
@@ -151,10 +156,8 @@ const Feed = ({ onLogout }) => {
                             </div>
                         );
                     })}
-
                 </main>
 
-                {/* Renderiza PostDetails dentro del Modal */}
                 {selectedPost && (
                     <Modal isOpen={selectedPostId !== null} onClose={closePostDetails}>
                         <PostDetails post={selectedPost} closeDetails={closePostDetails} />
