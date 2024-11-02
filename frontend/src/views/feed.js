@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import Sidebar from '../componentes/Sidebar';
 import PostDetails from '../componentes/PostDetails'; // Importa PostDetails
 import Modal from '../views/Modal';
+import SidebarContainer from '../componentes/SidebarControlador';
 import '../css/Feed.css';
 import '../css/sidebar.css';
 import PerfilDefecto from "../images/perfilDefecto.jpg";
@@ -43,7 +43,7 @@ const Feed = ({ onLogout }) => {
                 console.error("Fetch feed error:", error);
             }
         };
-        
+
         fetchFeed(); // Ejecuta la función fetchFeed
     }, [token]);
 
@@ -97,8 +97,8 @@ const Feed = ({ onLogout }) => {
     };
 
     const handleLikeUpdate = (postId, newLikes) => {
-        setPosts(prevPosts => 
-            prevPosts.map(post => 
+        setPosts(prevPosts =>
+            prevPosts.map(post =>
                 post._id === postId ? { ...post, likes: newLikes } : post
             )
         );
@@ -108,10 +108,11 @@ const Feed = ({ onLogout }) => {
 
     return (
         <div className="feed-layout">
-            <Sidebar />
+            <SidebarContainer />
 
             <div className="feed-content">
                 <div className="header">
+                    <span className="app-title">FAKESTAGRAM</span>
                     <div className="logout-container">
                         <FontAwesomeIcon onClick={onLogout} icon={faSignOutAlt} className="logout-icon" />
                     </div>
@@ -136,11 +137,12 @@ const Feed = ({ onLogout }) => {
 
                 <main className="main-feed">
                     {posts.map(post => {
+                        console.log(post.imageUrl); // Verifica el valor de imageUrl
                         const fullImageUrl = `http://localhost:3001/${post.imageUrl.replace(/\\/g, '/')}`;
                         return (
-                            <div 
-                                key={post._id} 
-                                className="post-card" 
+                            <div
+                                key={post._id}
+                                className="post-card"
                                 onClick={() => openPostDetails(post._id)}
                             >
                                 <img src={fullImageUrl} alt={post.caption} className="post-img" />
@@ -149,6 +151,7 @@ const Feed = ({ onLogout }) => {
                             </div>
                         );
                     })}
+
                 </main>
 
                 {/* Renderiza PostDetails dentro del Modal */}

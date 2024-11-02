@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Sidebar from '../componentes/Sidebar';
+import SidebarContainer from '../componentes/SidebarControlador';
 import PerfilDefecto from "../images/perfilDefecto.jpg";
 import "../css/UserProfile.css"
 
@@ -128,7 +128,7 @@ const UserProfile = () => {
 
   return (
     <div className='profile-layout'>
-      <Sidebar />
+      <SidebarContainer />
 
       <div className="profile-container">
         <div className="profile-header">

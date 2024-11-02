@@ -16,28 +16,22 @@ const Sidebar = () => {
         navigate('/feed');
     };
 
-    const toggleSidebar = () => {
-        setIsOpen(!isOpen);
-    };
 
     return (
-        <div className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
-            <button className="toggle-btn" onClick={toggleSidebar}>
-                <FontAwesomeIcon icon={faBars} />
-            </button>
+        <div className="sidebar closed">
+
             <ul className="sidebar-menu">
-                {isOpen && <h2>fakestagram</h2>}
                 <li onClick={handleHomeClick}>
-                    <FontAwesomeIcon icon={faHome} /> {isOpen && <span>Home</span>}
+                    <FontAwesomeIcon icon={faHome} /> 
                 </li>
                 <li>
-                    <FontAwesomeIcon icon={faHeart} /> {isOpen && <span>Notifications</span>}
+                    <FontAwesomeIcon icon={faHeart} /> 
                 </li>
                 <li>
-                    <FontAwesomeIcon icon={faPlusCircle} /> {isOpen && <span>Create</span>}
+                    <FontAwesomeIcon icon={faPlusCircle} /> 
                 </li>
                 <li onClick={handleProfileClick}>
-                    <FontAwesomeIcon icon={faUserCircle} /> {isOpen && <span>Profile</span>}
+                    <FontAwesomeIcon icon={faUserCircle} /> 
                 </li>
             </ul>
         </div>
