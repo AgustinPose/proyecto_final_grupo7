@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import '../css/PostDetails.css'; // Archivo CSS para manejar la responsividad y estilos
+import CommentSection from './CommentSection';
+import '../css/PostDetails.css';
 
 const PostDetails = ({ post, closeDetails }) => {
     const [likesCount, setLikesCount] = useState(post?.likes.length || 0);
@@ -16,7 +17,7 @@ const PostDetails = ({ post, closeDetails }) => {
             });
             if (!response.ok) throw new Error("Error al dar like");
             const data = await response.json();
-            setLikesCount(data.likes.length); // Actualiza el contador de likes basado en la respuesta del servidor
+            setLikesCount(data.likes.length);
         } catch (error) {
             console.error("Error al dar like", error);
         }
@@ -24,24 +25,29 @@ const PostDetails = ({ post, closeDetails }) => {
 
     if (!post) return <p>Cargando...</p>;
 
-    console.log(post.imageUrl);
-    console.log("hola");
     return (
         <div className="post-details">
             <button onClick={closeDetails} className="close-btn">Cerrar</button>
-            <div className="image-container">
-                {/* URL completa de la imagen */}
-                <img src={`http://localhost:3001/${post.imageUrl}`} alt={post.caption} />
-            </div>
-            <div className="post-content">
-                <h3>{post.caption}</h3>
-                <p>{likesCount} Likes</p>
-                <button onClick={handleLike} className="like-btn">Like</button>
-                <div className="comments-section">
-                    <h4>Comentarios:</h4>
-                    {post.comments.map(comment => (
-                        <p key={comment._id}>{comment.content}</p>
-                    ))}
+            <div className="post-details-container">
+                <div className="image-container">
+                    <img src={`http://localhost:3001/${post.imageUrl}`} alt={post.caption} />
+                </div>
+                <div className="post-content">
+                    <div className="post-header">
+                        <h3>{post.user.username}</h3>
+                        <p>{post.caption}</p>
+                    </div>
+                    
+                    <div className="post-interactions">
+                        <button onClick={handleLike} className="like-btn">
+                            {likesCount} Likes
+                        </button>
+                    </div>
+
+                    <CommentSection 
+                        postId={post._id}
+                        comments={post.comments}
+                    />
                 </div>
             </div>
         </div>

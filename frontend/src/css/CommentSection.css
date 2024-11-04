@@ -1,0 +1,75 @@
+/* CommentSection.css */
+.comment-section {
+    padding: 1rem;
+    border-top: 1px solid #dbdbdb;
+}
+
+.comment-form {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.comment-input {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid #dbdbdb;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.comment-submit {
+    padding: 0.5rem 1rem;
+    background-color: #0095f6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.comment-submit:hover {
+    background-color: #0081d6;
+}
+
+.comments-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.comment {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.comment-content {
+    flex: 1;
+}
+
+.comment-content strong {
+    margin-right: 0.5rem;
+    font-size: 14px;
+}
+
+.comment-content p {
+    margin: 0;
+    font-size: 14px;
+    color: #262626;
+}
+
+.delete-comment {
+    background: none;
+    border: none;
+    color: #ed4956;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 0.25rem;
+}
+
+.error-message {
+    color: #ed4956;
+    font-size: 14px;
+    margin: 0.5rem 0;
+}
