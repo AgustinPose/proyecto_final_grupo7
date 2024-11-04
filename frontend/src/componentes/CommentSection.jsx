@@ -35,12 +35,14 @@ const CommentSection = ({ postId, comments: initialComments }) => {
     return (
         <div className="comment-section">
             <div className="comments-list">
-                {comments.map(comment => (
-                    <div key={comment._id} className="comment">
-                        <span className="comment-username">{comment.user.username}</span>
-                        <span className="comment-content">{comment.content}</span>
-                    </div>
-                ))}
+            {comments.map(comment => (
+                <div key={comment._id} className="comment">
+                    <span className="comment-username">
+                        {comment.user ? comment.user.username : 'Usuario desconocido'}
+                    </span>
+                    <span className="comment-content">{comment.content}</span>
+                </div>
+            ))}
             </div>
             
             {error && <p className="error-message">{error}</p>}
