@@ -1,34 +1,49 @@
+// Modal.js
 import React from 'react';
 import "../css/Modal.css";
+import CommentSection from "../componentes/CommentSection";
 
 const Modal = ({ isOpen, onClose, post, onLike }) => {
-    if (!isOpen) return null; // No renderiza el modal si no está abierto
+    if (!isOpen) return null;
 
-    // Usa un valor por defecto si post o post.imageUrl no están definidos
     const fullImageUrl = post && post.imageUrl
         ? `http://localhost:3001/uploads/${post.imageUrl}`
-        : 'http://localhost:3001/uploads/default.png'; // Cambia a la URL de una imagen por defecto si es necesario
+        : 'http://localhost:3001/uploads/default.png';
 
     return (
-        <div className="modal-overlay">
-            <div className="modal-content">
-                <button className="close-button" onClick={onClose}>Cerrar</button>
-                {post?.imageUrl && ( // Solo muestra la imagen si imageUrl está definido
-                    <img src={fullImageUrl} alt={post.caption || 'Sin descripción'} className="modal-image" />
-                )}
-                <h3>{post?.caption || 'Sin descripción'}</h3>
-                <span className="like-text-modal">Like</span>
-                <button className="like-button-modal" onClick={onLike}></button> 
-                <p>{post?.likes?.length || 0} Likes</p>
-                <div>
-                    <h4>Comentarios:</h4>
-                    {post?.comments?.length ? (
-                        post.comments.map(comment => (
-                            <p key={comment._id}>{comment.content}</p>
-                        ))
-                    ) : (
-                        <p>No hay comentarios</p>
-                    )}
+        <div className="modal-overlay" onClick={onClose}>
+            <div className="modal-content" onClick={e => e.stopPropagation()}>
+                <div className="modal-header">
+                    <h3 className="modal-username">{post?.user?.username}</h3>
+                    <button className="close-button" onClick={onClose}>×</button>
+                </div>
+                
+                <div className="modal-body">
+                    <div className="modal-image-container">
+                        {post?.imageUrl && (
+                            <img src={fullImageUrl} alt={post.caption || 'Sin descripción'} className="modal-image" />
+                        )}
+                    </div>
+                    
+                    <div className="modal-interaction-section">
+                        <div className="modal-actions">
+                            <button 
+                                className={`like-button ${post?.likes?.includes(localStorage.getItem('userId')) ? 'liked' : ''}`} 
+                                onClick={onLike}
+                            >
+                                ♥
+                            </button>
+                            <span className="likes-count">{post?.likes?.length || 0} likes</span>
+                        </div>
+                        
+                        {post?.caption && (
+                            <div className="modal-caption">
+                                <strong>{post?.user?.username}</strong> {post.caption}
+                            </div>
+                        )}
+                        
+                        <CommentSection postId={post?._id} comments={post?.comments} />
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,7 +1,7 @@
-/* CommentSection.css */
 .comment-section {
-    padding: 1rem;
-    border-top: 1px solid #dbdbdb;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #ddd;
 }
 
 .comment-form {
@@ -11,65 +11,57 @@
 }
 
 .comment-input {
-    flex: 1;
-    padding: 0.5rem;
-    border: 1px solid #dbdbdb;
-    border-radius: 4px;
-    font-size: 14px;
+    flex: 1; /* Asegúrate de que el input se expanda */
+    padding: 0.5rem; /* Espaciado interno */
+    border: 1px solid #ddd; /* Borde */
+    border-radius: 5px; /* Esquinas redondeadas */
+    font-size: 1rem; /* Tamaño de fuente */
+    min-width: 0; /* Para que se ajuste correctamente en flex */
+    box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
 }
 
+
 .comment-submit {
-    padding: 0.5rem 1rem;
-    background-color: #0095f6;
+    background-color: #007bff;
     color: white;
     border: none;
-    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-size: 0.9rem;
     cursor: pointer;
 }
 
 .comment-submit:hover {
-    background-color: #0081d6;
+    background-color: #0056b3;
 }
 
 .comments-list {
-    max-height: 300px;
+    max-height: 200px;
     overflow-y: auto;
 }
 
 .comment {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     padding: 0.5rem 0;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid #f1f1f1;
 }
 
 .comment-content {
-    flex: 1;
-}
-
-.comment-content strong {
-    margin-right: 0.5rem;
-    font-size: 14px;
-}
-
-.comment-content p {
-    margin: 0;
-    font-size: 14px;
-    color: #262626;
+    font-size: 0.9rem;
+    color: #333;
 }
 
 .delete-comment {
     background: none;
     border: none;
-    color: #ed4956;
+    color: #ff4d4f;
+    font-size: 0.8rem;
     cursor: pointer;
-    font-size: 12px;
-    padding: 0.25rem;
+    margin-left: 0.5rem;
 }
 
-.error-message {
-    color: #ed4956;
-    font-size: 14px;
-    margin: 0.5rem 0;
+.delete-comment:hover {
+    color: #ff1a1f;
 }
