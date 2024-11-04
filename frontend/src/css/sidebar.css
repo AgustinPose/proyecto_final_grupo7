@@ -1,24 +1,8 @@
-/* General sidebar styles */
-.sidebar {
-    display: flex;
-    flex-direction: column;
-    background-color: white; /* Color de fondo */
-    color: #3a3939;
-    width: 200px;
-    transition: width 0.3s, background-color 0.3s;
-    height: 100vh;
-}
 
 .sidebar.closed {
     width: 50px;
 }
 
-.sidebar h2 {
-    padding: 15px;
-    font-size: 24px;
-    text-align: center;
-    color: #000000;
-}
 
 .sidebar-menu {
     list-style: none;
@@ -41,64 +25,6 @@
 .sidebar-menu li span {
     margin-left: 10px;
     color: #3a3939;
-}
-
-/* Toggle button */
-.toggle-btn {
-    background: none;
-    border: none;
-    color: #3a3939;
-    font-size: 24px;
-    padding: 5px;
-    cursor: pointer;
-    outline: none;
-}
-
-.toggle-btn:hover {
-    background-color: white; /* Color de fondo en hover */
-}
-
-.toggle-btn:focus {
-    outline: none;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .sidebar {
-        background-color: white; /* Color de fondo consistente */
-        position: fixed; /* Cambiado a fixed */
-        z-index: 10;
-        height: 100%;
-        width: 60px;
-    }
-
-    .sidebar.open {
-        width: 200px;
-        background-color: white; /* Asegúrate de mantener el mismo color de fondo */
-    }
-
-    .sidebar.closed {
-        width: 10px;
-    }
-
-    .toggle-btn {
-        list-style: none;
-        position: absolute;
-        top: 10px;
-        left: 10px;
-    }
-
-    .sidebar.closed li {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        margin-top: 50px; /* This creates space between toggle and first menu item */
-    }
-
-    .toggle-btn:hover {
-        background: none;
-    }
-
 }
 
 

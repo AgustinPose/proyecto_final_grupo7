@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Sidebar from '../componentes/Sidebar';
+import SidebarContainer from '../componentes/SidebarControlador';
 import "../css/UserFriendProfile.css";
 import PerfilDefecto from '../images/perfilDefecto.jpg';
 
@@ -114,7 +114,7 @@ const UserProfileFriend = () => {
 
   return (
     <div className='profile-friend-layout'>
-      <Sidebar />
+      <SidebarContainer />
       <div className="profile-friend-container">
         <div className="profile-friend-header">
           <img

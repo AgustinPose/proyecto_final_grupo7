@@ -1,4 +1,32 @@
 /* General Layout */
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 20px;
+}
+
+.app-title {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 20px;
+}
+
+.logout-icon {
+  cursor: pointer;
+  margin-left: auto;
+}
+
+
 .feed-layout {
   display: flex;
   height: 100vh; /* Altura total de la ventana */
