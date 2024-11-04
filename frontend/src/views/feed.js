@@ -159,7 +159,7 @@ const Feed = ({ onLogout }) => {
                 </main>
 
                 {selectedPost && (
-                    <Modal isOpen={selectedPostId !== null} onClose={closePostDetails}>
+                    <Modal isOpen={selectedPostId !== null} onClose={closePostDetails} post={selectedPost}>
                         <PostDetails post={selectedPost} closeDetails={closePostDetails} />
                     </Modal>
                 )}
