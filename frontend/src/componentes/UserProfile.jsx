@@ -68,6 +68,7 @@ const UserProfile = () => {
     // Preparar datos a enviar como JSON
     const updatedData = {
       username: newUsername,
+      description: newDescription
     };
   
     // Solo agregar la imagen si existe una nueva
@@ -95,7 +96,8 @@ const UserProfile = () => {
       setProfileData({ 
         ...profileData, 
         username: data.user.username, 
-        profilePicture: data.user.profilePicture 
+        profilePicture: data.user.profilePicture,
+        description: data.user.description
       });
   
       // Actualizar vista previa de la imagen
