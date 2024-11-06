@@ -4,6 +4,7 @@ import "../css/Modal.css";
 import CommentSection from "../componentes/CommentSection";
 
 const Modal = ({ isOpen, onClose, post, onLike }) => {
+    console.log(post?._id);
     if (!isOpen) return null;
     const fullImageUrl = post && post.imageUrl
         ? `http://localhost:3001/${post.imageUrl}`
