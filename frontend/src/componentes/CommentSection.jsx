@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import '../css/CommentSection.css';
 
-const CommentSection = ({ postId, comments: initialComments, onCommentAdded, handleFetchFeed }) => {
+const CommentSection = ({ postId, comments: initialComments, handleFetchFeed }) => {
     const [comments, setComments] = useState(initialComments);
     const [newComment, setNewComment] = useState('');
     const [error, setError] = useState('');
     const token = localStorage.getItem('token');
 
-    // Este useEffect se ejecuta cada vez que cambia el array de comentarios
     useEffect(() => {
         setComments(initialComments);
     }, [initialComments]);
@@ -29,17 +28,8 @@ const CommentSection = ({ postId, comments: initialComments, onCommentAdded, han
             if (!response.ok) throw new Error('Error al publicar el comentario');
 
             const savedComment = await response.json();
-
             handleFetchFeed();
-            console.log("funcioné");
-            // Actualiza el estado de comentarios al agregar el nuevo comentario
             setComments(prevComments => [...prevComments, savedComment]);
-
-            // Notificar al componente padre si se pasa la función onCommentAdded
-            if (onCommentAdded) {
-                onCommentAdded(savedComment);
-            }
-
             setNewComment('');
         } catch (error) {
             setError('No se pudo publicar el comentario');
@@ -50,7 +40,7 @@ const CommentSection = ({ postId, comments: initialComments, onCommentAdded, han
     return (
         <div className="comment-section">
             <div className="comments-list">
-                {comments.map(comment => (
+                {comments?.map(comment => (
                     <div key={comment._id} className="comment">
                         <span className="comment-username">
                             {comment.user?.username || 'Usuario desconocido'}
@@ -63,20 +53,24 @@ const CommentSection = ({ postId, comments: initialComments, onCommentAdded, han
             {error && <p className="error-message">{error}</p>}
             
             <form onSubmit={handleSubmitComment} className="comment-form">
-                <input
-                    type="text"
-                    value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
-                    placeholder="Añade un comentario..."
-                    className="comment-input"
-                />
-                <button 
-                    type="submit" 
-                    className="comment-submit"
-                    disabled={!newComment.trim()}
-                >
-                    Publicar
-                </button>
+                <div id="divDelInputDelComentario">
+                    <input
+                        type="text"
+                        value={newComment}
+                        onChange={(e) => setNewComment(e.target.value)}
+                        placeholder="Añade un comentario..."
+                        className="comment-input"
+                    />
+                </div>
+                <div id="divDelSubmitDelComentario">
+                    <button 
+                        type="submit" 
+                        className="comment-submit"
+                        disabled={!newComment.trim()}
+                    >
+                        Publicar
+                    </button>
+                </div>
             </form>
         </div>
     );
