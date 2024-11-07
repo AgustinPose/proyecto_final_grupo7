@@ -1,69 +1,72 @@
 .comment-section {
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid #ddd;
-}
-
-.comment-form {
+    flex: 1;
     display: flex;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-}
-
-.comment-input {
-    flex: 1; /* Asegúrate de que el input se expanda */
-    padding: 0.5rem; /* Espaciado interno */
-    border: 1px solid #ddd; /* Borde */
-    border-radius: 5px; /* Esquinas redondeadas */
-    font-size: 1rem; /* Tamaño de fuente */
-    min-width: 0; /* Para que se ajuste correctamente en flex */
-    box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
-}
-
-
-.comment-submit {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    font-size: 0.9rem;
-    cursor: pointer;
-}
-
-.comment-submit:hover {
-    background-color: #0056b3;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 .comments-list {
-    max-height: 200px;
+    flex: 1;
     overflow-y: auto;
+    padding: 16px;
 }
 
 .comment {
-    position: relative;
-    /* ... other existing styles ... */
+    margin-bottom: 12px;
+    line-height: 1.4;
 }
 
-.delete-comment {
-    position: absolute;
-    right: 5px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    color: #999;
-    font-size: 18px;
-    cursor: pointer;
-    padding: 0 5px;
+.comment-username {
+    font-weight: 600;
+    margin-right: 8px;
 }
 
 .comment-content {
-    font-size: 0.9rem;
-    color: #333;
+    color: #262626;
 }
 
+.error-message {
+    color: #ed4956;
+    padding: 8px 16px;
+    font-size: 14px;
+}
 
-.delete-comment:hover {
-    color: #ff4444;
+.comment-form {
+    border-top: 1px solid #dbdbdb;
+    padding: 16px;
+    display: flex;
+    gap: 8px;
+}
+
+.comment-input {
+    flex: 1;
+    border: 1px solid #dbdbdb;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 14px;
+    outline: none;
+}
+
+.comment-input:focus {
+    border-color: #a8a8a8;
+}
+
+.comment-submit {
+    background-color: #0095f6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.comment-submit:hover:not(:disabled) {
+    background-color: #0081d6;
+}
+
+.comment-submit:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }

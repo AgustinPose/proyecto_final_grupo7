@@ -16,28 +16,23 @@ import "./App.css";
 export const UserContext = createContext();
 
 function App() {
-  // Estado para el token
   const [token, setToken] = useState(localStorage.getItem("token") || "");
+  const [isLoggedIn, setIsLoggedIn] = useState(!!token);
 
-  // Función para manejar el seteo del token y guardarlo en localStorage
   const handleSetToken = (newToken) => {
     localStorage.setItem("token", newToken);
     setToken(newToken);
   };
 
-  // Estado de login basado en la existencia del token
-  const [isLoggedIn, setIsLoggedIn] = useState(!!token);
-
-  // Efecto para actualizar el estado de login cuando cambia el token
   useEffect(() => {
-    setIsLoggedIn(!!token); // Si hay un token, el usuario está logeado
+    setIsLoggedIn(!!token);
   }, [token]);
 
-  // Función para manejar el logout
   const handleLogout = () => {
-    setToken(""); // Limpia el token
-    localStorage.removeItem("token"); // Remuevo el token
-    setIsLoggedIn(false); // booleano para gestionar el loggedin
+    setToken("");
+    localStorage.removeItem("token");
+    localStorage.removeItem("_id");
+    setIsLoggedIn(false);
   };
 
   return (
@@ -45,27 +40,26 @@ function App() {
       <UserContext.Provider value={{ token, setToken: handleSetToken }}>
         <Router>
           <Routes>
-            {/* Ruta para el login */}
             <Route
               path="/login"
               element={
-                <RedirectIfAuth>
+                isLoggedIn ? (
+                  <Navigate to="/feed" />
+                ) : (
                   <UserLogin onLogin={() => setIsLoggedIn(true)} />
-                </RedirectIfAuth>
+                )
               }
             />
-
-            {/* Ruta de signup */}
             <Route
               path="/signup"
               element={
-                <RedirectIfAuth>
+                isLoggedIn ? (
+                  <Navigate to="/feed" />
+                ) : (
                   <UserSignUp />
-                </RedirectIfAuth>
+                )
               }
             />
-
-            {/* Ruta protegida para el feed */}
             <Route
               path="/feed"
               element={
