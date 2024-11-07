@@ -3,8 +3,8 @@ import React from 'react';
 import "../css/Modal.css";
 import CommentSection from "../componentes/CommentSection";
 
-const Modal = ({ isOpen, onClose, post, onLike }) => {
-    console.log(post?._id);
+const ModalPostDetails = ({ isOpen, onClose, post, onLike, handleFetchFeed }) => {
+    console.log("hola");
     if (!isOpen) return null;
     const fullImageUrl = post && post.imageUrl
         ? `http://localhost:3001/${post.imageUrl}`
@@ -42,7 +42,7 @@ const Modal = ({ isOpen, onClose, post, onLike }) => {
                             </div>
                         )}
                         
-                        <CommentSection postId={post?._id} comments={post?.comments} />
+                        <CommentSection handleFetchFeed={handleFetchFeed} postId={post?._id} comments={post?.comments} />
                     </div>
                 </div>
             </div>
@@ -50,4 +50,4 @@ const Modal = ({ isOpen, onClose, post, onLike }) => {
     );
 };
 
-export default Modal;
+export default ModalPostDetails;

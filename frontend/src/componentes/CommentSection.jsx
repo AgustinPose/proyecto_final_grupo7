@@ -1,38 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import '../css/CommentSection.css';
 
-const CommentSection = ({ postId, comments: initialCommentIds = [], onCommentAdded }) => {
-    const [comments, setComments] = useState([]);
+const CommentSection = ({ postId, comments: initialComments, onCommentAdded, handleFetchFeed }) => {
+    const [comments, setComments] = useState(initialComments);
     const [newComment, setNewComment] = useState('');
     const [error, setError] = useState('');
     const token = localStorage.getItem('token');
 
-    // Function to fetch each comment's data using its ID
-    const fetchComments = async () => {
-        try {
-            const fetchedComments = await Promise.all(
-                initialCommentIds.map(async (commentId) => {
-                    const response = await fetch(`http://localhost:3001/api/posts/comments/${commentId}`, {
-                        method: 'GET',
-                        headers: {
-                            'Authorization': `Bearer ${token}`
-                        }
-                    });
-                    if (!response.ok) throw new Error(`Error fetching comment ${commentId}`);
-                    return await response.json();
-                })
-            );
-            setComments(fetchedComments);
-        } catch (err) {
-            console.error('Error fetching comments:', err);
-            setError('Error al cargar los comentarios');
-        }
-    };
-
-    // Load comments on component mount
+    // Este useEffect se ejecuta cada vez que cambia el array de comentarios
     useEffect(() => {
-        fetchComments();
-    }, [initialCommentIds, token]);
+        setComments(initialComments);
+    }, [initialComments]);
 
     const handleSubmitComment = async (e) => {
         e.preventDefault();
@@ -52,18 +30,17 @@ const CommentSection = ({ postId, comments: initialCommentIds = [], onCommentAdd
 
             const savedComment = await response.json();
 
-            // Update local state with the new comment
-            setComments([...comments, savedComment]);
+            handleFetchFeed();
+            console.log("funcioné");
+            // Actualiza el estado de comentarios al agregar el nuevo comentario
+            setComments(prevComments => [...prevComments, savedComment]);
 
-            // Notify parent component
+            // Notificar al componente padre si se pasa la función onCommentAdded
             if (onCommentAdded) {
                 onCommentAdded(savedComment);
             }
 
             setNewComment('');
-
-            // Re-fetch all comments to ensure username is updated
-            await fetchComments();
         } catch (error) {
             setError('No se pudo publicar el comentario');
             console.error(error);

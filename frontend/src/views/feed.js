@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import PostDetails from '../componentes/PostDetails';
-import Modal from '../views/Modal';
+import ModalPostDetails from './ModalPostDetails';
 import SidebarContainer from '../componentes/SidebarControlador';
 import '../css/Feed.css';
 import '../css/sidebar.css';
@@ -18,25 +17,24 @@ const Feed = ({ onLogout }) => {
     const currentUserId = localStorage.getItem('userId');
     const token = localStorage.getItem('token');
 
+    const handleFetchFeed = async () =>{
+        try {
+            const response = await fetch('http://localhost:3001/api/posts/feed', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (!response.ok) throw new Error('Error al obtener el feed');
+            const data = await response.json();
+            const sortedPosts = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            setPosts(sortedPosts);
+        } catch (error) {
+            console.error("Fetch feed error:", error);
+        }
+    }
     useEffect(() => {
-        const fetchFeed = async () => {
-            try {
-                const response = await fetch('http://localhost:3001/api/posts/feed', {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                if (!response.ok) throw new Error('Error al obtener el feed');
-                const data = await response.json();
-                const sortedPosts = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-                setPosts(sortedPosts);
-            } catch (error) {
-                console.error("Fetch feed error:", error);
-            }
-        };
-
-        fetchFeed();
+        handleFetchFeed();
     }, [token]);
 
     useEffect(() => {
@@ -159,9 +157,7 @@ const Feed = ({ onLogout }) => {
                 </main>
 
                 {selectedPost && (
-                    <Modal isOpen={selectedPostId !== null} onClose={closePostDetails} post={selectedPost}>
-                        <PostDetails post={selectedPost} closeDetails={closePostDetails} />
-                    </Modal>
+                    <ModalPostDetails isOpen={selectedPostId !== null} onClose={closePostDetails} post={selectedPost} handleFetchFeed={handleFetchFeed}/>
                 )}
             </div>
         </div>
