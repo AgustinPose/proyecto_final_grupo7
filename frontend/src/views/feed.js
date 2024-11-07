@@ -93,6 +93,12 @@ const Feed = ({ onLogout }) => {
         );
     };
 
+    const handleNewPost = (newPost) => {
+        console.log("Nuevo post recibido:", newPost);  // Verifica que el nuevo post esté llegando correctamente
+        setPosts((prevPosts) => [newPost, ...prevPosts]); // Agrega el nuevo post al principio
+    };
+
+
     const selectedPost = posts.find(post => post._id === selectedPostId);
 
     // Filtra amigos según el término de búsqueda
@@ -102,7 +108,7 @@ const Feed = ({ onLogout }) => {
 
     return (
         <div className="feed-layout">
-            <SidebarContainer />
+            <SidebarContainer handleNewPost={handleNewPost} />
 
             <div className="feed-content">
                 <div className="header">

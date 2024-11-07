@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import UploadImage from '../componentes/UploadImage'; 
 import { faHome, faHeart, faPlusCircle, faUserCircle, faBars} from '@fortawesome/free-solid-svg-icons';
 import '../css/sidebar.css';
 
-const Sidebar = () => {
+const Sidebar = ( {handleNewPost} ) => {
     const navigate = useNavigate();
-    const [isOpen, setIsOpen] = useState(true);
+    const [isUploadModalOpen, setUploadModalOpen] = useState(false);
 
     const handleProfileClick = () => {
         navigate('/user-profile');
@@ -16,6 +17,11 @@ const Sidebar = () => {
         navigate('/feed');
     };
 
+    const handleUploadClick = () => {
+        setUploadModalOpen(true);
+    };
+
+    
 
     return (
         <div className="sidebar closed">
@@ -27,13 +33,24 @@ const Sidebar = () => {
                 <li>
                     <FontAwesomeIcon icon={faHeart} /> 
                 </li>
-                <li>
+                <li onClick={handleUploadClick}>
                     <FontAwesomeIcon icon={faPlusCircle} /> 
                 </li>
                 <li onClick={handleProfileClick}>
                     <FontAwesomeIcon icon={faUserCircle} /> 
                 </li>
             </ul>
+
+            {/* Modal de subida */}
+            {isUploadModalOpen && (
+                <div className="upload-modal">
+                    <UploadImage 
+                        onUploadSuccess={handleNewPost} 
+                        onClose={() => setUploadModalOpen(false)} 
+                    />
+                </div>
+            )}
+
         </div>
     );
 };
