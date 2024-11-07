@@ -108,7 +108,7 @@ const Feed = ({ onLogout }) => {
 
     return (
         <div className="feed-layout">
-            <SidebarContainer handleNewPost={handleNewPost} />
+            <SidebarContainer handleNewPost={handleNewPost} handleFetchFeed={handleFetchFeed} />
 
             <div className="feed-content">
                 <div className="header">

@@ -5,7 +5,7 @@ import UploadImage from '../componentes/UploadImage';
 import { faHome, faHeart, faPlusCircle, faUserCircle, faBars} from '@fortawesome/free-solid-svg-icons';
 import '../css/sidebar.css';
 
-const Sidebar = ( {handleNewPost} ) => {
+const Sidebar = ( {handleNewPost, handleFetchFeed} ) => {
     const navigate = useNavigate();
     const [isUploadModalOpen, setUploadModalOpen] = useState(false);
 
@@ -20,8 +20,6 @@ const Sidebar = ( {handleNewPost} ) => {
     const handleUploadClick = () => {
         setUploadModalOpen(true);
     };
-
-    
 
     return (
         <div className="sidebar closed">
@@ -45,6 +43,7 @@ const Sidebar = ( {handleNewPost} ) => {
             {isUploadModalOpen && (
                 <div className="upload-modal">
                     <UploadImage 
+                        handleFetchFeed={handleFetchFeed}
                         onUploadSuccess={handleNewPost} 
                         onClose={() => setUploadModalOpen(false)} 
                     />

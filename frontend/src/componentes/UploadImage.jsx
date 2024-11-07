@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const UploadImage = ({ onUploadSuccess, onClose }) => {
+const UploadImage = ({ onUploadSuccess, onClose, handleFetchFeed }) => {
     const [selectedFile, setSelectedFile] = useState(null);
     const [caption, setCaption] = useState('');
 
@@ -39,9 +39,8 @@ const UploadImage = ({ onUploadSuccess, onClose }) => {
             });
 
             if (response.ok) {
-                console.log(localStorage.getItem('user.username'));
                 const newPost = await response.json();
-                console.log("Subida exitosa:", newPost); 
+                handleFetchFeed();
                 onUploadSuccess(newPost); // Notifica al componente superior de la subida exitosa
                 onClose(); // Cierra el modal tras la subida
             } else {
