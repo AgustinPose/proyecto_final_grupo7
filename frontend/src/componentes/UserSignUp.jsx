@@ -8,6 +8,8 @@ const UserSignUp = () => {
     email: "",
     password: "",
   });
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
@@ -16,47 +18,40 @@ const UserSignUp = () => {
     });
   };
 
-  const navigate = useNavigate();
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
-    fetch("http://localhost:3001/api/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          return response.json().then((data) => {
-            console.log(data.message);
-          });
-        }
-        return response.json();
-      })
-      .then((data) => {
-        if (data && data.token) {
-          console.log("Success:", data);
-          localStorage.setItem("token", data.token);
-          localStorage.setItem("_id", data._id);
-          navigate("/feed");
-        }
-      })
-      .catch((error) => {
-        // Manejo de errores de red
+    try {
+      const response = await fetch("http://localhost:3001/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
       });
-  };
 
-  const userLoginRedirect = () => {
-    navigate("/login");
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Error en el registro");
+      }
+
+      if (data && data.token) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("_id", data._id);
+        navigate("/feed");
+      }
+    } catch (error) {
+      setError(error.message);
+    }
   };
 
   return (
     <div className="signup-container">
       <form onSubmit={handleSubmit} className="signup-form">
         <h1>Register a New User</h1>
+        {error && <p className="error-message">{error}</p>}
         <div className="input-group">
           <label htmlFor="username">Username:</label>
           <input
@@ -91,7 +86,7 @@ const UserSignUp = () => {
           />
         </div>
         <button type="submit">Sign Up</button>
-        <button type="button" onClick={userLoginRedirect}>
+        <button type="button" onClick={() => navigate("/login")}>
           Login
         </button>
       </form>
