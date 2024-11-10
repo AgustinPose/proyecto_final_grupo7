@@ -70,28 +70,7 @@ const Feed = ({ onLogout }) => {
         setSelectedPostId(null);
     };
 
-    const handleLike = async (postId) => {
-        try {
-            const response = await fetch(`http://localhost:3001/api/posts/${postId}/like`, {
-                method: 'POST',
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            if (response.ok) {
-                const updatedPost = await response.json();
-                handleLikeUpdate(postId, updatedPost.likes);
-            }
-        } catch (error) {
-            console.error("Error al dar like", error);
-        }
-    };
 
-    const handleLikeUpdate = (postId, newLikes) => {
-        setPosts(prevPosts =>
-            prevPosts.map(post =>
-                post._id === postId ? { ...post, likes: newLikes } : post
-            )
-        );
-    };
 
     const handleNewPost = (newPost) => {
         console.log("Nuevo post recibido:", newPost);  // Verifica que el nuevo post esté llegando correctamente
