@@ -5,43 +5,29 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose, faHeart } from '@fortawesome/free-solid-svg-icons';
 
 const ModalPostDetails = ({ isOpen, onClose, post, handleFetchFeed }) => {
-    const userId = localStorage.getItem('userId');
+    const userId = localStorage.getItem('_id');
     const token = localStorage.getItem('token');
+    const [isLikedLocal, setIsLikedLocal] = useState(post.likes.includes(userId)); // Estado para saber si el usuario ha dado like
 
     // Estado para manejar el color del corazón y el contador localmente
-    const [isLikedLocal, setIsLikedLocal] = useState(false);  // Inicializado en falso, se actualizará con el useEffect
-    const [likesCount, setLikesCount] = useState(post?.likes?.length || 0);
+    const [likesCount, setLikesCount] = useState(post.likes.length || 0); // Contador de likes
 
-    // useEffect para obtener el estado del like al cargar el modal
+
     useEffect(() => {
-        const checkLikeStatus = async () => {
-            setLikesCount(post?.likes?.length || 0); // Inicializamos correctamente el contador
+        const checkLikeStatus = () => {
+            setLikesCount(post?.likes?.length || 0); // Inicializar correctamente el contador de likes
     
-            try {
-                const response = await fetch(`http://localhost:3001/api/posts/${post._id}/like`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
-                });
-    
-                if (response.status === 200) {
-                    console.log('Usuario NO dio like');
-                    setIsLikedLocal(false);  // Usuario no ha dado like
-                } else if (response.status === 400) {
-                    console.log('Usuario YA dio like');
-                    setIsLikedLocal(true);   // Usuario ya dio like
-                } else {
-                    console.error('Error desconocido', response.status);
-                }
-            } catch (error) {
-                console.error('Error al verificar el estado del like:', error);
+            // Verificamos si el usuario ya ha dado like
+            if (post.likes.includes(userId)) {
+
+                setIsLikedLocal(true);  // Usuario ya dio like
+            } else {
+                setIsLikedLocal(false);  // Usuario no ha dado like
             }
         };
     
         if (post?._id) {
-            checkLikeStatus();
+            checkLikeStatus();  // Solo verificamos el estado del like
         }
     
         return () => {
@@ -49,14 +35,12 @@ const ModalPostDetails = ({ isOpen, onClose, post, handleFetchFeed }) => {
             setIsLikedLocal(false);
             setLikesCount(0);
         };
-    }, [post?._id, token, post?.likes?.length]);  // Recalcular cada vez que cambien los "likes" o el post
-    
-     // Dependencias para que el efecto se ejecute cuando sea necesario
+    }, [post?._id, userId, post.likes]); 
 
     const handleLikeToggle = async () => {
         // Function for adding a like
         const addLike = async () => {
-            console.log('Adding like');
+
             const response = await fetch(`http://localhost:3001/api/posts/${post._id}/like`, {
                 method: 'POST',
                 headers: {
@@ -73,7 +57,6 @@ const ModalPostDetails = ({ isOpen, onClose, post, handleFetchFeed }) => {
     
         // Function for removing a like
         const removeLike = async () => {
-            console.log('Removing like');
             const response = await fetch(`http://localhost:3001/api/posts/${post._id}/like`, {
                 method: 'DELETE',
                 headers: {

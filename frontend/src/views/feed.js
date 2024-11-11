@@ -68,6 +68,7 @@ const Feed = ({ onLogout }) => {
 
     const closePostDetails = () => {
         setSelectedPostId(null);
+        handleFetchFeed();
     };
 
 
