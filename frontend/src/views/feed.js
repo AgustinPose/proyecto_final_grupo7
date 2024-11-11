@@ -68,30 +68,16 @@ const Feed = ({ onLogout }) => {
 
     const closePostDetails = () => {
         setSelectedPostId(null);
+        handleFetchFeed();
     };
 
-    const handleLike = async (postId) => {
-        try {
-            const response = await fetch(`http://localhost:3001/api/posts/${postId}/like`, {
-                method: 'POST',
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            if (response.ok) {
-                const updatedPost = await response.json();
-                handleLikeUpdate(postId, updatedPost.likes);
-            }
-        } catch (error) {
-            console.error("Error al dar like", error);
-        }
+
+
+    const handleNewPost = (newPost) => {
+        console.log("Nuevo post recibido:", newPost);  // Verifica que el nuevo post esté llegando correctamente
+        setPosts((prevPosts) => [newPost, ...prevPosts]); // Agrega el nuevo post al principio
     };
 
-    const handleLikeUpdate = (postId, newLikes) => {
-        setPosts(prevPosts =>
-            prevPosts.map(post =>
-                post._id === postId ? { ...post, likes: newLikes } : post
-            )
-        );
-    };
 
     const selectedPost = posts.find(post => post._id === selectedPostId);
 
@@ -102,7 +88,7 @@ const Feed = ({ onLogout }) => {
 
     return (
         <div className="feed-layout">
-            <SidebarContainer />
+            <SidebarContainer handleNewPost={handleNewPost} handleFetchFeed={handleFetchFeed} />
 
             <div className="feed-content">
                 <div className="header">

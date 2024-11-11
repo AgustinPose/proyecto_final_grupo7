@@ -22,43 +22,60 @@
     flex-direction: column;
     max-height: 90vh;
 }
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
+  .modal-header {
+    display: grid;
+    grid-template-columns: 40px 1fr 40px;
     align-items: center;
-    padding: 14px;
+    padding: 15px;
     border-bottom: 1px solid #dbdbdb;
 }
 
 .modal-username {
+    text-align: center;
+    grid-column: 2;
     margin: 0;
-    font-size: 16px;
-    font-weight: 600;
 }
 
 .close-button {
+    color: #000;
+    grid-column: 3;
+    justify-self: end;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+  .close-button:hover {
+      background: none;
+  }
+
+  .like-button {
     background: none;
     border: none;
     font-size: 24px;
     cursor: pointer;
-    padding: 0;
-    color: #262626;
+    transition: color 0.2s ease;
 }
 
-.modal-body {
-    display: flex;
-    height: 100%;
-    max-height: calc(90vh - 60px);
+.like-button:hover {
+    background: none;
 }
 
-.modal-image-container {
-    flex: 1;
-    background: #000;
-    display: flex;
-    align-items: center;
-    max-width: 600px;
-}
+  .modal-body {
+      display: flex;
+      height: 100%;
+      max-height: calc(90vh - 60px);
+  }
+
+  .modal-image-container {
+      flex: 1;
+      background: #000;
+      display: flex;
+      align-items: center;
+      max-width: 600px;
+  }
 
 .modal-image {
     width: 100%;
@@ -77,20 +94,28 @@
     padding: 14px;
     border-bottom: 1px solid #dbdbdb;
 }
-
-.like-button {
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    padding: 8px;
-    color: #262626;
+    .like-button {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      transition: color 0.2s ease;
 }
 
-.like-button.liked {
-    color: #ed4956;
+.like-button:hover {
+      background: none;
 }
 
+  .like-button.liked {
+      color: #ff3040;
+      animation: likeAnimation 0.3s ease-in-out;
+  }
+
+  @keyframes likeAnimation {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+      100% { transform: scale(1); }
+  }
 .likes-count {
     margin-left: 4px;
     font-weight: 600;
@@ -104,7 +129,6 @@
     line-height: 1.4;
 }
 
-// CommentSection.css
 .comment-section {
     display: flex;
     flex-direction: column;
