@@ -1,40 +1,39 @@
-
 .sidebar.closed {
-    width: 50px;
+  width: 50px;
 }
 
-
 .sidebar-menu {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .sidebar-menu li {
-    padding: 15px;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .sidebar-menu li:hover {
-    background-color: white; /* Color de fondo en hover igual que el toggle */
+  background-color: white; /* Color de fondo en hover igual que el toggle */
 }
 
 .sidebar-menu li span {
-    margin-left: 10px;
-    color: #3a3939;
+  margin-left: 10px;
+  color: #3a3939;
 }
 
 .upload-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 800;
 }
