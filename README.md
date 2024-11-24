@@ -32,7 +32,9 @@ Las personas que clonen este repositorio, tendrán la posibilidad de:
   - Visualizar las publicaciones subidas tanto por el usuario logueado como la de los amigos
   - Visualizar el perfil propio (foto de perfil y descripcion)
   - También incluye la funcionalidad de ser completamente responsive, lo que significa que, al reducir el tamaño de la ventana del navegador, la aplicación se adaptará automáticamente para mantener un diseño claro y funcional.
-  - 
+  - Dar y sacar me gustas en las publicaciones
+  - Escribir y eliminar comentarios
+
 Gracias al backend propuesto por la catedra, se logró utilziar los diferentes endpoints con el fin de lograr una plataforma funcional. 
 
 - Grupo 7 (Camilo Danielli, Martina Laventura, Diego Moreno y Agustín Pose)
